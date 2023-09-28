@@ -1,0 +1,142 @@
+.card {
+  margin: 0;
+  position: relative;
+}
+
+.card__button {
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 6px;
+}
+
+.card__button:hover .card__label {
+  opacity: 1;
+}
+
+.card__image {
+  width: 100%;
+  border-radius: 6px;
+  aspect-ratio: 1.8 / 1;
+  display: block;
+}
+
+.card__label {
+  padding: 7px 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  top: 14px;
+  right: 14px;
+  border-radius: 30px;
+  background-color: #313131;
+  color: #fff;
+  text-align: center;
+  font-family: Inter;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 9px;
+  opacity: 0;
+  transition: all 0.3s;
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .card__label {
+    top: 10px;
+    right: 10px;
+  }
+}
+
+.card__label_active {
+  display: block;
+}
+
+.card__label-tip {
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background-color: #ee3465;
+  background-image: url('../../images/tip.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 8px 4.5px;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .card__label-tip {
+    top: 10px;
+    right: 10px;
+  }
+}
+
+.card__label-tip_active {
+  display: block;
+}
+
+.card__data-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+@media (max-width: 1023.98px) {
+  .card__data-container {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .card__data-container {
+    margin-top: 13px;
+  }
+}
+
+.card__title {
+  color: #fff;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-left: 14px;
+}
+
+@media (max-width: 1023.98px) {
+  .card__title {
+    margin-left: 0;
+  }
+}
+
+.card__time-container {
+  display: flex;
+  width: 52px;
+  height: 18px;
+  border-radius: 3px;
+  background-color: #2f2f2f;
+  margin-right: 14px;
+}
+
+@media (max-width: 1023.98px) {
+  .card__time-container {
+    margin-right: 0;
+  }
+}
+
+.card__time-value {
+  color: #8b8b8b;
+  text-align: center;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 10px;
+  margin: auto;
+}

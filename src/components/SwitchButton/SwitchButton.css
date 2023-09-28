@@ -1,0 +1,62 @@
+.switch {
+  display: none;
+}
+
+.switch:checked + .switch-label::after {
+  left: 20px;
+  background-color: #fff;
+}
+
+.switch:checked + .switch-label::before {
+  background-color: #3ddc84;
+}
+
+.switch-label {
+  cursor: pointer;
+  color: #fff;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  position: relative;
+  margin: 29px auto 0;
+  padding-left: 45px;
+}
+
+@media (max-width: 1023.98px) {
+  .switch-label {
+    margin-top: 41px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .switch-label {
+    margin-top: 46px;
+    font-size: 11px;
+  }
+}
+
+.switch-label::before {
+  content: '';
+  width: 34px;
+  height: 14px;
+  background-color: #ebebeb;
+  border-radius: 20px;
+  position: absolute;
+  top: 2px;
+  left: -1px;
+  transition: all 0.6s ease-in;
+}
+
+.switch-label::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  position: absolute;
+  top: 4px;
+  left: 2px;
+  transition: all 0.3s ease-in;
+}

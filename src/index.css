@@ -1,0 +1,15 @@
+@import url('./vendor/normalize.css');
+@import url('./vendor/fonts.css');
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+.root {
+  background-color: #202020;
+}
+
+/* * {
+  outline: 0.1px solid red;
+} */
