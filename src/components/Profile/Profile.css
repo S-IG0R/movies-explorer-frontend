@@ -1,0 +1,130 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile__name {
+  margin: 74px 0 123px 0;
+  color: #fff;
+  text-align: center;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+@media (max-width: 1023.98px) {
+  .profile__name {
+    margin-top: 235px;
+    margin-bottom: 97px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .profile__name {
+    margin-top: 69px;
+    margin-bottom: 80px;
+  }
+}
+
+.profile__form {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 410px;
+}
+
+@media (max-width: 767.98px) {
+  .profile__form  {
+    width: 260px;
+  }
+}
+
+.profile__input-label {
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+  font-family: Inter;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border-bottom: 1px solid #424242;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.profile__input-label:last-of-type {
+  border: none;
+}
+
+.profile__input {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  text-align: right;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  max-width: 350px;
+}
+
+.profile__button-edit {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  text-align: center;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 184px;
+  transition: opacity 0.5s;
+}
+
+.profile__button-edit:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 1023.98px) {
+  .profile__button-edit {
+    margin-top: 175px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .profile__button-edit {
+    font-size: 12px;
+    margin-top: 345px;
+  }
+}
+
+.profile__button-logout {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ee3465;
+  text-align: center;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 16px;
+  transition: opacity 0.5s;
+}
+
+.profile__button-logout:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 767.98px) {
+  .profile__button-logout {
+    font-size: 12px;
+  }
+}

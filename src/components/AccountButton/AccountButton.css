@@ -1,0 +1,26 @@
+.account_button {
+  border: none;
+  border-radius: 20px;
+  background-color: #313131;
+  cursor: pointer;
+  transition: all 0.5s;
+  color: #fff;
+  text-align: center;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  text-decoration: none;
+  padding: 8px 20px;
+}
+
+.account_button:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 1023.98px) {
+  .account_button {
+    display: none;
+  }
+}

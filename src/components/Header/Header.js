@@ -1,21 +1,43 @@
-import { Link /*useLocation*/ } from 'react-router-dom';
 import { Logo } from '../Logo/Logo';
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { HeaderNavigation } from '../HeaderNavigation/HeaderNavigation';
+import { AccountButton } from '../AccountButton/AccountButton';
+import { BurgerMenu } from '../BurgerMenu/BurgerMenu';
+import { BurgerButton } from '../BurgerButton/BurgerButton';
 import './Header.css';
 
-export function Header() {
+export function Header({ loggedIn }) {
+  console.log(loggedIn);
+  const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
   return (
     <header className="header">
       <Logo />
-      <ul className="header__menu-list">
-        <li className="header__menu-item">
-          <Link to="/signup" className="header__register-link">
-            Регистрация
-          </Link>
-        </li>
-        <li className="header__menu-item">
-          <Link to="/signin" className="header__login-button">Войти</Link>
-        </li>
-      </ul>
+      {!loggedIn && (
+        <ul className="header__menu-list">
+          <li className="header__menu-item">
+            <Link to="/signup" className="header__register-link">
+              Регистрация
+            </Link>
+          </li>
+          <li className="header__menu-item">
+            <Link to="/signin" className="header__login-button">
+              Войти
+            </Link>
+          </li>
+        </ul>
+      )}
+      {loggedIn && (
+        <>
+          <HeaderNavigation />
+          <AccountButton />
+          <BurgerButton setIsBurgerMenuOpen={setIsBurgerMenuOpen} />
+          <BurgerMenu
+            isBurgerMenuOpen={isBurgerMenuOpen}
+            setIsBurgerMenuOpen={setIsBurgerMenuOpen}
+          />
+        </>
+      )}
     </header>
   );
 }
