@@ -138,7 +138,7 @@
   text-decoration: none;
   margin-top: 99px;
   display: inline-block;
-  transition: all 0.5s;
+  transition: opacity 0.5s;
 }
 
 .about-me__link:hover{

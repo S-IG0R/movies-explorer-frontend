@@ -8,7 +8,6 @@ import { BurgerButton } from '../BurgerButton/BurgerButton';
 import './Header.css';
 
 export function Header({ loggedIn }) {
-  console.log(loggedIn);
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
   return (
     <header className="header">

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './MoviesCard.css';
 
-export function MoviesCard({ link, alt, title, time }) {
+export function MoviesCard({ link, alt, title, duration }) {
   const location = useLocation().pathname;
   const [isSaved, setIsSaved] = useState(false);
 
@@ -43,8 +43,8 @@ export function MoviesCard({ link, alt, title, time }) {
       </div>
       <div className="card__data-container">
         <figcaption className="card__title">{title}</figcaption>
-        <div className="card__time-container">
-          <p className="card__time-value">{time}</p>
+        <div className="card__duration-container">
+          <p className="card__duration-value">{duration}</p>
         </div>
       </div>
     </figure>

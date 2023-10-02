@@ -3,7 +3,7 @@
   display: grid;
   max-width: 1140px;
   column-gap: 30px;
-  row-gap: 56px;
+  row-gap: 61px;
   justify-content: center;
   grid-template-columns: repeat(auto-fit, 360px);
   padding-left: 30px;
@@ -12,9 +12,8 @@
 
 @media (max-width: 1023.98px) {
   .card-list {
-
     grid-template-columns: repeat(auto-fit, 339px);
-    row-gap: 43px;
+    row-gap: 48px;
   }
 }
 
@@ -24,6 +23,6 @@
     padding-left: 10px;
     padding-right: 10px;
     margin-top: 44px;
-    row-gap: 36px;
+    row-gap: 38px;
   }
 }

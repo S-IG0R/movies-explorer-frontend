@@ -10,7 +10,7 @@
   line-height: 16px;
   background-color: #303030;
   border-radius: 10px;
-  transition: 0.5s;
+  transition: opacity 0.5s;
   border: none;
   cursor: pointer;
 }

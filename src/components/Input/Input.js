@@ -1,17 +1,29 @@
 import './Input.css';
-export function Input({ name, type, value, required, label }) {
+export function Input({
+  name,
+  type,
+  value,
+  required,
+  label,
+  onChange,
+  validationMessage,
+}) {
   return (
     <div className="input__container">
-      <label className='input__label' htmlFor={name}>{label}</label>
+      <label className="input__label" htmlFor={name}>
+        {label}
+      </label>
       <input
-        className="input"
+        className={`input ${validationMessage && 'input_invalid'}`}
         type={type}
         name={name}
         id={name}
         value={value}
-        required
+        onChange={onChange}
+        required={required}
+        minLength={2}
       />
-      <span className='input__error'>{'Что-то пошло не так...'}</span>
+      <span className="input__error">{validationMessage}</span>
     </div>
   );
 }

@@ -29,7 +29,7 @@ export function HeaderNavigation() {
             }`
           }
         >
-          Сохраненные фильмы
+          Сохранённые фильмы
         </NavLink>
       </li>
     </ul>

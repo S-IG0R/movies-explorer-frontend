@@ -42,7 +42,7 @@
   text-decoration: none;
   margin-right: 30px;
   opacity: 1;
-  transition: 0.5s;
+  transition: opacity 0.5s;
 }
 
 .header__register-link:hover {
@@ -71,7 +71,7 @@
   line-height: 16px;
   cursor: pointer;
   opacity: 1;
-  transition: 0.5s;
+  transition: opacity 0.5s;
 }
 
 .header__login-button:hover {

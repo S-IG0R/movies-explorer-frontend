@@ -12,7 +12,7 @@
   letter-spacing: -1.2px;
   text-decoration: none;
   margin-bottom: 20px;
-  transition: all 0.5s;
+  transition: opacity 0.5s;
 }
 
 .portfolio-link::after {

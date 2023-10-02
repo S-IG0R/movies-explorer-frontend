@@ -12,6 +12,23 @@
   margin-top: 71px;
   border: none;
   transition: opacity 0.5s;
+  cursor: pointer;
+}
+
+@media (max-width: 767.98px) {
+  .button-submit {
+    margin-top: 157px;
+    font-size: 12px;
+  }
+}
+
+.button-submit_disabled {
+  background: #F8F8F8;
+  color: #C2C2C2;
+}
+
+.button-submit_disabled:disabled {
+  pointer-events: none;
 }
 
 .button-submit:hover {

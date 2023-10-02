@@ -1,4 +1,4 @@
-import { PortfolioLink } from '../PortfoloLink/PortfolioLink';
+import { PortfolioLink } from '../PortfolioLink/PortfolioLink';
 import './Portfolio.css';
 
 export function Portfolio() {
