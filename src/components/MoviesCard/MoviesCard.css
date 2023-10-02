@@ -1,0 +1,174 @@
+.card {
+  margin: 0;
+  position: relative;
+}
+
+.card__container {
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 6px;
+}
+
+.card__container:hover .card__button-save {
+  opacity: 1;
+}
+
+.card__container:hover .card__button-remove {
+  opacity: 1;
+}
+
+.card__image {
+  width: 100%;
+  border-radius: 6px;
+  aspect-ratio: 1.8 / 1;
+  display: block;
+}
+
+.card__button-save {
+  cursor: pointer;
+  padding: 7px 10px;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  border: none;
+  border-radius: 30px;
+  background-color: #313131;
+  color: #fff;
+  text-align: center;
+  font-family: Inter;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 9px;
+  opacity: 0;
+  transition: opacity 0.4s;
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .card__button-save {
+    top: 10px;
+    right: 10px;
+  }
+}
+
+.card__button-save_active {
+  display: block;
+}
+
+.card__label-tip {
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background-color: #ee3465;
+  background-image: url('../../images/tip.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 8px 4.5px;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .card__label-tip {
+    top: 10px;
+    right: 10px;
+  }
+}
+
+.card__label-tip_active {
+  display: block;
+}
+
+.card__data-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+@media (max-width: 1023.98px) {
+  .card__data-container {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .card__data-container {
+    margin-top: 15px;
+  }
+}
+
+.card__title {
+  color: #fff;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-left: 14px;
+}
+
+@media (max-width: 1023.98px) {
+  .card__title {
+    margin-left: 0;
+  }
+}
+
+.card__duration-container {
+  display: flex;
+  width: 52px;
+  height: 18px;
+  border-radius: 3px;
+  background-color: #2f2f2f;
+  margin-right: 14px;
+}
+
+@media (max-width: 1023.98px) {
+  .card__duration-container {
+    margin-right: 0;
+  }
+}
+
+.card__duration-value {
+  color: #8b8b8b;
+  text-align: center;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 10px;
+  margin: auto;
+}
+
+.card__button-remove {
+  width: 21px;
+  height: 21px;
+  opacity: 0;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background-image: url('../../images/delete-card-button.svg');
+  border: none;
+  border-radius: 50%;
+  background-color: #313131;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: opacity 0.5s;
+}
+
+.card__button-remove:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 767.98px) {
+  .card__button-remove {
+    top: 10px;
+    right: 10px;
+  }
+}

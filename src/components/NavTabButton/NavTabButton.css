@@ -1,0 +1,29 @@
+.nav-button {
+  text-align: center;
+  width: 96px;
+  height: 36px;
+  color: #fff;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  background-color: #303030;
+  border-radius: 10px;
+  transition: opacity 0.5s;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-button:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 767.98px) {
+  .nav-button {
+    width: 82px;
+    height: 26px;
+    border-radius: 6px;
+    font-size: 10px;
+  }
+}

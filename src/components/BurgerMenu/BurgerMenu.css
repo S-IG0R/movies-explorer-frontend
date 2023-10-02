@@ -1,0 +1,135 @@
+.burger-menu {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  justify-content: flex-end;
+  position: fixed;
+  z-index: 9998;
+  display: flex;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.3s, opacity 0.3s;
+}
+
+.burger-menu_active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.burger__button-close {
+  position: absolute;
+  top: 27px;
+  right: 27px;
+  z-index: 9999;
+  width: 22px;
+  height: 22px;
+  background-image: url('../../images/close-button.svg');
+  background-color: transparent;
+  border: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: opacity 0.5s;
+}
+
+@media (max-width: 767.98px) {
+  .burger__button-close {
+    top: 18px;
+    right: 18px;
+  }
+}
+
+.burger__button-close:hover {
+  opacity: 0.8;
+}
+
+.burger-menu__link-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 520px;
+  background: #202020;
+  position: relative;
+  padding-top: 159px;
+}
+
+@media (max-width: 767.98px) {
+  .burger-menu__link-list {
+    padding-top: 144px;
+  }
+}
+
+.burger-menu__link-list-item {
+  margin-bottom: 28px;
+}
+
+@media (max-width: 767.98px) {
+  .burger-menu__link-list-item {
+    margin-bottom: 24px;
+  }
+}
+
+.burger-menu__link-list-item:last-child {
+  margin-bottom: 0;
+}
+
+.burger-menu__link {
+  color: #fff;
+  text-align: center;
+  font-feature-settings: 'clig' off, 'liga' off;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration: none;
+  transition: opacity 0.5s;
+}
+
+.burger-menu__link:hover {
+  opacity: 0.8;
+}
+
+.burger-menu__link_active {
+  border-bottom: 2px solid #fff;
+  padding-bottom: 4px;
+}
+
+@media (max-width: 767.98px) {
+  .burger-menu__link_active {
+    padding-bottom: 7px;
+  }
+}
+
+.burger-menu__profile-button {
+  color: #fff;
+  text-align: center;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  border-radius: 20px;
+  background-color: #313131;
+  text-decoration: none;
+  padding: 8px 21px;
+  margin-top: 594px;
+  display: block;
+  transition: opacity 0.5s;
+}
+
+@media (max-width: 767.98px) {
+  .burger-menu__profile-button {
+    margin-top: 421px;
+  }
+}
+
+.burger-menu__profile-button:hover {
+  opacity: 0.8;
+}

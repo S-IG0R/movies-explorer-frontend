@@ -1,0 +1,33 @@
+.icon {
+  width: 90px;
+  height: 60px;
+  border-radius: 10px;
+  background: #303030;
+  display: flex;
+}
+
+@media (max-width: 1023.98px) {
+  .icon {
+    width: 84px;
+    height: 57px;
+  }
+}
+
+.icon__heading {
+  color: #fff;
+  text-align: center;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.56px;
+  margin: auto;
+}
+
+@media (max-width: 1023.98px) {
+  .icon__heading {
+    font-size: 12px;
+    letter-spacing: -0.48px;
+  }
+}
