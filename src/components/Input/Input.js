@@ -7,6 +7,9 @@ export function Input({
   label,
   onChange,
   validationMessage,
+  minLength,
+  maxLength,
+  placeholder
 }) {
   return (
     <div className="input__container">
@@ -21,7 +24,9 @@ export function Input({
         value={value}
         onChange={onChange}
         required={required}
-        minLength={2}
+        minLength={minLength}
+        maxLength={maxLength}
+        placeholder={placeholder}
       />
       <span className="input__error">{validationMessage}</span>
     </div>

@@ -45,6 +45,9 @@ export function Login({ setLoggedIn }) {
           onChange={handleChange}
           required={true}
           validationMessage={values.email.validationMessage}
+          minLength="2"
+          maxLength="30"
+          placeholder="example@example.com"
         />
         <Input
           name="password"
@@ -54,6 +57,9 @@ export function Login({ setLoggedIn }) {
           onChange={handleChange}
           required={true}
           validationMessage={values.password.validationMessage}
+          minLength="8"
+          maxLength="30"
+          placeholder="Ваш пароль"
         />
         <span className="login__error">
           Вы ввели неправильный логин или пароль.

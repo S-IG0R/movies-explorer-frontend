@@ -13,18 +13,20 @@ export function Header({ loggedIn }) {
     <header className="header">
       <Logo />
       {!loggedIn && (
-        <ul className="header__menu-list">
-          <li className="header__menu-item">
-            <Link to="/signup" className="header__register-link">
-              Регистрация
-            </Link>
-          </li>
-          <li className="header__menu-item">
-            <Link to="/signin" className="header__login-button">
-              Войти
-            </Link>
-          </li>
-        </ul>
+        <nav className="header__menu">
+          <ul className='header__menu-list'>
+            <li className="header__menu-item">
+              <Link to="/signup" className="header__register-link">
+                Регистрация
+              </Link>
+            </li>
+            <li className="header__menu-item">
+              <Link to="/signin" className="header__login-button">
+                Войти
+              </Link>
+            </li>
+          </ul>
+        </nav>
       )}
       {loggedIn && (
         <>

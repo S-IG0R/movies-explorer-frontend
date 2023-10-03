@@ -77,7 +77,7 @@
   .project-description__paragraph {
     margin-top: 16px;
     font-size: 11px;
-    line-height: 16px; /* 145.455% */
+    line-height: 16px;
   }
 }
 
@@ -140,7 +140,7 @@
 .project-description__chart-caption {
   color: #8b8b8b;
   text-align: center;
-  font-family: Inter;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;

@@ -20,7 +20,7 @@ export function Profile({ setLoggedIn }) {
   };
   return (
     <section className="profile">
-      <p className="profile__name">{`Привет, ${'Виталий'}!`}</p>
+      <h1 className="profile__name">{`Привет, ${'Виталий'}!`}</h1>
       <form
         className="profile__form"
         name="profile-form"

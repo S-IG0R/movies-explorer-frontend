@@ -40,6 +40,9 @@ export function Register() {
           onChange={handleChange}
           required={true}
           validationMessage={values.name.validationMessage}
+          minLength="2"
+          maxLength="30"
+          placeholder="Иван"
         />
         <Input
           name="email"
@@ -49,6 +52,8 @@ export function Register() {
           onChange={handleChange}
           required={true}
           validationMessage={values.email.validationMessage}
+          minLength="2"
+          placeholder="example@example.com"
         />
         <Input
           name="password"
@@ -58,6 +63,9 @@ export function Register() {
           onChange={handleChange}
           required={true}
           validationMessage={values.password.validationMessage}
+          minLength="8"
+          maxLength="30"
+          placeholder="Придумайте сложный пароль"
         />
         <span className="register__error">
           Пользователь с таким email уже существует.

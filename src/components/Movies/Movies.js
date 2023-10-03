@@ -12,82 +12,20 @@ export function Movies() {
       <SearchForm />
       <MoviesCardList>
         {/* <Preloader /> */}
-        <MoviesCard
-          link={cardImage}
-          alt="карточка с фильмом"
-          title="33 слова о дизайне"
-          duration="1ч 17м"
-        />
-        <MoviesCard
-          link={cardImage}
-          alt="карточка"
-          title="33 слова о дизайне"
-          duration="1ч 17м"
-        />
-        <MoviesCard
-          link={cardImage}
-          alt="карточка"
-          title="33 слова о дизайне"
-          duration="1ч 17м"
-        />
-        <MoviesCard
-          link={cardImage}
-          alt="карточка"
-          title="33 слова о дизайне"
-          duration="1ч 17м"
-        />
-        <MoviesCard
-          link={cardImage}
-          alt="карточка"
-          title="33 слова о дизайне"
-          duration="1ч 17м"
-        />
-        <MoviesCard
-          link={cardImage}
-          alt="карточка"
-          title="33 слова о дизайне"
-          duration="1ч 17м"
-        />
-        <MoviesCard
-          link={cardImage}
-          alt="карточка"
-          title="33 слова о дизайне"
-          duration="1ч 17м"
-        />
-        <MoviesCard
-          link={cardImage}
-          alt="карточка"
-          title="33 слова о дизайне"
-          duration="1ч 17м"
-        />
-        <MoviesCard
-          link={cardImage}
-          alt="карточка"
-          title="33 слова о дизайне"
-          duration="1ч 17м"
-        />
-        <MoviesCard
-          link={cardImage}
-          alt="карточка"
-          title="33 слова о дизайне"
-          duration="1ч 17м"
-        />
-        <MoviesCard
-          link={cardImage}
-          alt="карточка"
-          title="33 слова о дизайне"
-          duration="1ч 17м"
-        />
-        <MoviesCard
-          link={cardImage}
-          alt="карточка"
-          title="33 слова о дизайне"
-          duration="1ч 17м"
-        />
+        <ul className='movies__card-list'>
+          <li className='movies__card-item'>
+            <MoviesCard
+              link={cardImage}
+              alt="карточка с фильмом"
+              title="33 слова о дизайне"
+              duration="1ч 17м"
+            />
+          </li>
+        </ul>
       </MoviesCardList>
       {/* <NothingFound /> */}
       <div className="movies__button-container">
-        <button className="movies__load-button">Ещё</button>
+        <button className="movies__load-button" type='button'>Ещё</button>
       </div>
     </section>
   );

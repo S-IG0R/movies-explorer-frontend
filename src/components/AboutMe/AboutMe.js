@@ -10,7 +10,7 @@ export function AboutMe() {
         <SectionHeader header="Студент" />
         <div className="about-me__main-container">
           <div className="about-me__text-container">
-            <p className="about-me__name">Виталий</p>
+            <h3 className="about-me__name">Виталий</h3>
             <p className="about-me__job">Фронтенд-разработчик, 30 лет</p>
             <p className="about-me__caption">
               Я&nbsp;родился и&nbsp;живу в&nbsp;Саратове, закончил факультет

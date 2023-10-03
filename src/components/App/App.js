@@ -10,7 +10,7 @@ import { Register } from '../Register/Register';
 import { Login } from '../Login/Login';
 import { PageNotFound } from '../PageNotFound/PageNotFound';
 
-import { useState, /*useEffect*/ } from 'react';
+import { useState /*useEffect*/ } from 'react';
 
 function App() {
   // const navigate = useNavigate();
@@ -57,18 +57,20 @@ function App() {
         location === '/movies' ||
         location === '/saved-movies' ||
         location === '/profile') && <Header loggedIn={loggedIn} />}
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/movies" element={<Movies />} />
-        <Route path="/saved-movies" element={<SavedMovies />} />
-        <Route
-          path="/profile"
-          element={<Profile setLoggedIn={setLoggedIn} />}
-        />
-        <Route path="/signup" element={<Register />} />
-        <Route path="/signin" element={<Login setLoggedIn={setLoggedIn} />} />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
+      <main className="content">
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/movies" element={<Movies />} />
+          <Route path="/saved-movies" element={<SavedMovies />} />
+          <Route
+            path="/profile"
+            element={<Profile setLoggedIn={setLoggedIn} />}
+          />
+          <Route path="/signup" element={<Register />} />
+          <Route path="/signin" element={<Login setLoggedIn={setLoggedIn} />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </main>
       {/* отображаем футер в случае следующих путей */}
       {(location === '/' ||
         location === '/movies' ||

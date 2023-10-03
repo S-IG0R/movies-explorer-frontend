@@ -4,6 +4,6 @@ export function BurgerButton({ setIsBurgerMenuOpen }) {
     setIsBurgerMenuOpen(true);
   }
   return (
-    <button className="burger-menu-button" onClick={handleClickBurger} />
+    <button className="burger-menu-button" onClick={handleClickBurger} type='button'/>
   )
 }

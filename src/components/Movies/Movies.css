@@ -26,7 +26,7 @@
   cursor: pointer;
   color: #fff;
   text-align: center;
-  font-family: Inter;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
@@ -36,4 +36,10 @@
 
 .movies__load-button:hover {
   opacity: 0.8;
+}
+
+.movies__card-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }

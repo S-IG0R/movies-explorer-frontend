@@ -7,6 +7,7 @@ export function NavTabButton({ title, anchor }) {
       onClick={() => {
         window.location.href = `#${anchor}`;
       }}
+      type='button'
     >
       {title}
     </button>

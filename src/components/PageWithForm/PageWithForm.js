@@ -17,7 +17,7 @@ export function PageWithForm({
     <section className="form-page">
       <div className="form-page__container">
         <Logo />
-        <p className="form-page__title">{title}</p>
+        <h1 className="form-page__title">{title}</h1>
         <form
           className="form-page__form"
           name={formName}
