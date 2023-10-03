@@ -9,6 +9,7 @@ export function SearchForm() {
             className="search-section__input"
             type="text"
             placeholder="Фильм"
+            required
           />
           <button className="search-section__submit-button" />
         </div>

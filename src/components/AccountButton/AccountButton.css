@@ -1,4 +1,4 @@
-.account_button {
+.account-button {
   border: none;
   border-radius: 20px;
   background-color: #313131;
@@ -15,12 +15,12 @@
   padding: 8px 20px;
 }
 
-.account_button:hover {
+.account-button:hover {
   opacity: 0.8;
 }
 
 @media (max-width: 1023.98px) {
-  .account_button {
+  .account-button {
     display: none;
   }
 }

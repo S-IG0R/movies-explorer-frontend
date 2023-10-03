@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 export function HeaderNavigation() {
   return (
-    <ul className="navigation-bar__list">
+    <ul className="navigation-bar">
       <li className="navigation-bar__list-item">
         <NavLink
           to="/movies"

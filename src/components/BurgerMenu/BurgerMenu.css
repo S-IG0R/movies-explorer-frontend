@@ -19,7 +19,7 @@
   opacity: 1;
 }
 
-.burger__button-close {
+.burger-menu__button-close {
   position: absolute;
   top: 27px;
   right: 27px;
@@ -36,13 +36,13 @@
 }
 
 @media (max-width: 767.98px) {
-  .burger__button-close {
+  .burger-menu__button-close {
     top: 18px;
     right: 18px;
   }
 }
 
-.burger__button-close:hover {
+.burger-menu__button-close:hover {
   opacity: 0.8;
 }
 

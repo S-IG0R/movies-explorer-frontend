@@ -1,4 +1,4 @@
-.navigation-bar__list {
+.navigation-bar {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -7,7 +7,7 @@
 }
 
 @media (max-width: 1023.98px) {
-  .navigation-bar__list {
+  .navigation-bar {
     display: none;
   }
 }

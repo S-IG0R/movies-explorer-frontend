@@ -2,9 +2,9 @@ import './PortfolioLink.css';
 
 export function PortfolioLink({ title, link }) {
   return (
-      <div className='portfolio-link__container'>
+      <div className='portfolio-link'>
         <a
-          className="portfolio-link"
+          className="portfolio__link"
           href={link}
           target="_blank"
           rel="noreferrer"

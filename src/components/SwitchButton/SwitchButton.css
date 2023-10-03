@@ -22,6 +22,11 @@
   position: relative;
   margin: 29px auto 0;
   padding-left: 45px;
+  transition: opacity 0.8s;
+}
+
+.switch-label:hover {
+  opacity: 0.8;
 }
 
 @media (max-width: 1023.98px) {

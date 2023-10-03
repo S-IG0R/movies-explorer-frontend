@@ -7,7 +7,7 @@ export function BurgerMenu({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
   };
   return (
     <nav className={`burger-menu ${isBurgerMenuOpen && 'burger-menu_active'}`}>
-      <button className="burger__button-close" onClick={handleClickClose} />
+      <button className="burger-menu__button-close" onClick={handleClickClose} />
       <ul className="burger-menu__link-list">
         <li className="burger-menu__link-list-item">
           <NavLink
