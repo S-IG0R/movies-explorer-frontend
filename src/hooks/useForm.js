@@ -5,7 +5,7 @@ export function useForm(inputValues = {}) {
 
   const handleChange = (event) => {
     // достаем нужные поля из элемента инпута
-    const { value, name, validationMessage } = event.target;
+    const { value, name, validationMessage, checked } = event.target;
     const { valid } = event.target.validity;
 
     // записываем их значения в объект с ключом-именем инпута
@@ -15,6 +15,7 @@ export function useForm(inputValues = {}) {
         value: value,
         isValid: valid,
         validationMessage: validationMessage,
+        isChecked: checked
       },
     });
   };

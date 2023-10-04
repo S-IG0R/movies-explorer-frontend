@@ -1,13 +1,14 @@
 .card {
   margin: 0;
   position: relative;
+  list-style-type: none;
 }
 
 .card__container {
   width: 100%;
   border: none;
   background-color: transparent;
-  cursor: pointer;
+  display: block;
   padding: 0;
   border-radius: 6px;
 }
@@ -110,7 +111,7 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  margin-left: 14px;
+  margin: 0 0 0 14px;
 }
 
 @media (max-width: 1023.98px) {

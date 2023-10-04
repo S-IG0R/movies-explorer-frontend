@@ -2,16 +2,23 @@
   color: #8b8b8b;
   font-feature-settings: 'clig' off, 'liga' off;
   font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
-  font-size: 24px;
+  font-size: 18px;
   font-style: normal;
-  font-weight: 500;
-  line-height: 18px;
+  font-weight: 400;
+  line-height: 27px;
   display: block;
   text-align: center;
+  margin: 75px auto 0;
+  max-width: 600px;
+  padding-left: 70px;
+  padding-right: 70px;
 }
 
 @media (max-width: 767.98px) {
   .no-result {
-    font-size: 18px;
+    font-size: 12px;
+    line-height: 18px;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './MoviesCard.css';
 
-export function MoviesCard({ link, alt, title, duration }) {
+export function MoviesCard({ link, alt, title, duration, trailerLink }) {
   const location = useLocation().pathname;
   const [isSaved, setIsSaved] = useState(false);
 
@@ -15,8 +15,8 @@ export function MoviesCard({ link, alt, title, duration }) {
   };
 
   return (
-    <figure className="card">
-      <div className="card__container">
+    <li className="card">
+      <a href={trailerLink} target='_blank' rel="noreferrer" className="card__container">
         {/* если мы в /movies покажем кнопку сохранить */}
         {location === '/movies' ? (
           <button
@@ -40,13 +40,13 @@ export function MoviesCard({ link, alt, title, duration }) {
           className={`card__label-tip ${isSaved && `card__label-tip_active`}`}
         />
         <img className="card__image" src={link} alt={alt} />
-      </div>
+      </a>
       <div className="card__data-container">
-        <figcaption className="card__title">{title}</figcaption>
+        <p className="card__title">{title}</p>
         <div className="card__duration-container">
           <p className="card__duration-value">{duration}</p>
         </div>
       </div>
-    </figure>
+    </li>
   );
 }
