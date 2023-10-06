@@ -5,14 +5,8 @@ import { PageWithForm } from '../PageWithForm/PageWithForm';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 
-export function Login({ setLoggedIn }) {
+export function Login({ handleLogin }) {
   const navigate = useNavigate();
-
-  const onSubmit = (evt) => {
-    evt.preventDefault();
-    setLoggedIn(true);
-    navigate('/movies', { replace: true });
-  };
 
   const { values, handleChange } = useForm({
     email: {
@@ -26,6 +20,11 @@ export function Login({ setLoggedIn }) {
       value: '',
     },
   });
+
+  const onSubmit = (evt) => {
+    evt.preventDefault();
+    handleLogin(values.email.value, values.password.value);
+  };
 
   return (
     <PageWithForm

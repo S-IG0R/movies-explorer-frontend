@@ -1,8 +1,8 @@
 import './App.css';
 
-import { registration } from '../../utils/MainApi';
-
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
 import { Header } from '../Header/Header';
 import { Main } from '../Main/Main';
 import { Footer } from '../Footer/Footer';
@@ -12,15 +12,23 @@ import { Profile } from '../Profile/Profile';
 import { Register } from '../Register/Register';
 import { Login } from '../Login/Login';
 import { PageNotFound } from '../PageNotFound/PageNotFound';
+import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
+
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 import { getAllMovies } from '../../utils/MoviesApi';
-
-import { useState, useEffect } from 'react';
+import {
+  checkToken,
+  login,
+  registration,
+  updateProfile,
+  addMovieToSave,
+} from '../../utils/MainApi';
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation().pathname;
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   let [windowSize, setWindowSize] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [shortMoviesChecked, setShortMoviesChecked] = useState(false);
@@ -33,6 +41,8 @@ function App() {
   const [infoMessage, setInfoMessage] = useState('');
   const [searchParams, setSearchParams] = useState({});
   const [registrationMessage, setRegistrationMessage] = useState('');
+  const [loginMessage, setLoginMessage] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
 
   // загружаем данные с локального хранилища при перезагрузке страницы
   useEffect(() => {
@@ -194,7 +204,13 @@ function App() {
   useEffect(() => {
     const renderMovies = (cardsNumber) => {
       // вырезаем необходимый по размеру кусок массива
-      const moviesToRender = moviesFiltered.slice(0, cardsNumber);
+      // добавим в него поле isSaved
+      const moviesToRender = moviesFiltered
+        .slice(0, cardsNumber)
+        .map((movie) => ({
+          ...movie,
+          isSaved: false,
+        }));
 
       // отправляем новый массив на рендеринг
       setMoviesToRender(moviesToRender);
@@ -241,63 +257,143 @@ function App() {
     }
   };
 
-
   // ============================================================ //
 
   const handleRegistration = (name, email, password) => {
     registration(name, email, password)
-    .then((data) => {
-      if(data) {
-        navigate('/signin', { replace: true });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      setRegistrationMessage(err)
-    })
+      .then((data) => {
+        if (data) {
+          navigate('/signin', { replace: true });
+        }
+      })
+      .catch((err) => {
+        setRegistrationMessage(err);
+      });
+  };
+
+  const handleLogin = (email, password) => {
+    login(email, password)
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem('jwt', data.token);
+          setLoggedIn(true);
+          navigate('/movies', { replace: true });
+        }
+      })
+      .catch((err) => {
+        setLoginMessage();
+      });
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('searchParams');
+    setLoggedIn(false);
+    navigate('/', { replace: true });
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    if (!token) return;
+    checkToken(token)
+      .then((userInfo) => {
+        if (userInfo) {
+          setLoggedIn(true);
+          setCurrentUser(userInfo);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [loggedIn]);
+
+  const handleUpdateProfile = (name, email) => {
+    updateProfile(name, email)
+      .then((updatedUser) => {
+        setCurrentUser(updatedUser);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleSaveMovie = (movie) => {
+    console.log(movie);
+    // addMovieToSave(movie)
+    //   .then((movie) => {})
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   return (
-    <div className="page">
-      {/* отображаем хедер в случае следующих путей */}
-      {(location === '/' ||
-        location === '/saved-movies' ||
-        location === '/movies' ||
-        location === '/profile') && <Header loggedIn={loggedIn} />}
-      <main className="content">
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route
-            path="/movies"
-            element={
-              <Movies
-                setSearchQuery={setSearchQuery}
-                moviesToRender={moviesToRender}
-                setShortMoviesChecked={setShortMoviesChecked}
-                loadMoreCards={loadMoreCards}
-                showPreloader={showPreloader}
-                showButtonMore={showButtonMore}
-                infoMessage={infoMessage}
-                handleSubmitSearchForm={handleSubmitSearchForm}
-                searchParams={searchParams}
-              />
-            }
-          />
-          <Route path="/saved-movies" element={<SavedMovies />} />
-          <Route
-            path="/profile"
-            element={<Profile setLoggedIn={setLoggedIn} />}
-          />
-          <Route path="/signup" element={<Register handleRegistration={handleRegistration}/>} />
-          <Route path="/signin" element={<Login setLoggedIn={setLoggedIn} />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </main>
-      {/* отображаем футер в случае следующих путей */}
-      {(location === '/' ||
-        location === '/movies' ||
-        location === '/saved-movies') && <Footer />}
-    </div>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="page">
+        {/* отображаем хедер в случае следующих путей */}
+        {(location === '/' ||
+          location === '/saved-movies' ||
+          location === '/movies' ||
+          location === '/profile') && <Header loggedIn={loggedIn} />}
+        <main className="content">
+          <Routes>
+            <Route path="/" element={<Main />} />
+
+            <Route
+              path="/movies"
+              element={
+                <ProtectedRoute loggedIn={loggedIn}>
+                  <Movies
+                    setSearchQuery={setSearchQuery}
+                    moviesToRender={moviesToRender}
+                    setShortMoviesChecked={setShortMoviesChecked}
+                    loadMoreCards={loadMoreCards}
+                    showPreloader={showPreloader}
+                    showButtonMore={showButtonMore}
+                    infoMessage={infoMessage}
+                    handleSubmitSearchForm={handleSubmitSearchForm}
+                    searchParams={searchParams}
+                    handleSaveMovie={handleSaveMovie}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/saved-movies"
+              element={
+                <ProtectedRoute loggedIn={loggedIn}>
+                  <SavedMovies />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute loggedIn={loggedIn}>
+                  <Profile
+                    setLoggedIn={setLoggedIn}
+                    handleLogout={handleLogout}
+                    handleUpdateProfile={handleUpdateProfile}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/signup"
+              element={<Register handleRegistration={handleRegistration} />}
+            />
+            <Route
+              path="/signin"
+              element={<Login handleLogin={handleLogin} />}
+            />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </main>
+        {/* отображаем футер в случае следующих путей */}
+        {(location === '/' ||
+          location === '/movies' ||
+          location === '/saved-movies') && <Footer />}
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 

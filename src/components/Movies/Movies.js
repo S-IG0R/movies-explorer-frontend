@@ -14,7 +14,8 @@ export function Movies({
   showButtonMore,
   infoMessage,
   handleSubmitSearchForm,
-  searchParams
+  searchParams,
+  handleSaveMovie,
 }) {
   const handleClick = () => {
     loadMoreCards();
@@ -36,25 +37,16 @@ export function Movies({
           {moviesToRender.map((movie) => {
             return (
               <MoviesCard
-                link={`https://api.nomoreparties.co${movie.image.url}`}
-                alt={movie.nameRU}
-                title={movie.nameRU}
+                handleSaveMovie={handleSaveMovie}
+                movie={movie}
                 key={movie.id}
-                trailerLink={movie.trailerLink}
-                duration={
-                  movie.duration >= 60
-                    ? `${Math.floor(movie.duration / 60)}ч ${
-                        movie.duration % 60
-                      }м.`
-                    : `${movie.duration}м`
-                }
               />
             );
           })}
         </MoviesCardList>
       )}
-      { infoMessage && !showPreloader && <InfoMessage message={infoMessage} />}
-      { showButtonMore && !showPreloader && (
+      {infoMessage && !showPreloader && <InfoMessage message={infoMessage} />}
+      {showButtonMore && !showPreloader && (
         <div className="movies__button-container">
           <button
             className="movies__load-button"

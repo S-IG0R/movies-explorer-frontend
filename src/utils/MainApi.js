@@ -3,6 +3,8 @@ const BASE_URL =
     ? process.env.REACT_APP_BASE_URL
     : 'http://localhost:3001';
 
+const token = localStorage.getItem('jwt') ?? '';
+
 // регистрация
 export const registration = (name, email, password) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -14,11 +16,15 @@ export const registration = (name, email, password) => {
   }).then(getResponse);
 };
 
-// авторизация
+// логин
 export const login = (email, password) => {
-  return fetch(`${BASE_URL}/signin`, doRequest(email, password)).then(
-    getResponse
-  );
+  return fetch(`${BASE_URL}/signin`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ password, email }),
+  }).then(getResponse);
 };
 
 // проверка токена
@@ -32,14 +38,40 @@ export const checkToken = (token) => {
   }).then(getResponse);
 };
 
-const doRequest = (name, email, password) => {
-  return {
+// редактирование профиля
+export const updateProfile = (name, email) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ name, email }),
+  }).then(getResponse);
+};
+
+// создание нового фильма
+export const addMovieToSave = (movie) => {
+  return fetch(`${BASE_URL}/movies`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ name, password, email }),
-  };
+    body: JSON.stringify({
+      country: movie.country,
+      director: movie.director,
+      duration: movie.duration,
+      year: movie.year,
+      description: movie.description,
+      image: movie.image.url,
+      trailerLink: movie.trailerLink,
+      nameRU: movie.nameRU,
+      nameEN: movie.nameEN,
+      thumbnail: movie.image.formats.thumbnail.url,
+      movieId: movie.movieId,
+    }),
+  });
 };
 
 const getResponse = (res) => {
