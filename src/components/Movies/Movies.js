@@ -13,21 +13,23 @@ export function Movies({
   showPreloader,
   showButtonMore,
   infoMessage,
+  handleSubmitSearchForm,
+  searchParams
 }) {
   const handleClick = () => {
     loadMoreCards();
   };
-
-  console.log(showPreloader);
   return (
     <section className="movies">
       <SearchForm
         name="search-movies"
         setSearchQuery={setSearchQuery}
         setShortMoviesChecked={setShortMoviesChecked}
+        handleSubmitSearchForm={handleSubmitSearchForm}
+        searchParams={searchParams}
       />
       {showPreloader && <Preloader />}
-      {moviesToRender.length === 0 ? (
+      {moviesToRender.length === 0 || showPreloader ? (
         ''
       ) : (
         <MoviesCardList>
@@ -51,8 +53,8 @@ export function Movies({
           })}
         </MoviesCardList>
       )}
-      {infoMessage && <InfoMessage message={infoMessage}/>}
-      {showButtonMore && (
+      { infoMessage && !showPreloader && <InfoMessage message={infoMessage} />}
+      { showButtonMore && !showPreloader && (
         <div className="movies__button-container">
           <button
             className="movies__load-button"

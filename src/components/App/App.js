@@ -1,5 +1,8 @@
 import './App.css';
-import { Routes, Route, /*useNavigate,*/ useLocation } from 'react-router-dom';
+
+import { registration } from '../../utils/MainApi';
+
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Header } from '../Header/Header';
 import { Main } from '../Main/Main';
 import { Footer } from '../Footer/Footer';
@@ -15,12 +18,12 @@ import { getAllMovies } from '../../utils/MoviesApi';
 import { useState, useEffect } from 'react';
 
 function App() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation().pathname;
   const [loggedIn, setLoggedIn] = useState(true);
   let [windowSize, setWindowSize] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [shortMoviesChecked, setShortMoviesChecked] = useState('');
+  const [shortMoviesChecked, setShortMoviesChecked] = useState(false);
   const [moviesFiltered, setMoviesFiltered] = useState([]);
   const [initialMovies, setInitialMovies] = useState([]);
   const [numberCardToAdd, setNumberCardToAdd] = useState(null);
@@ -28,46 +31,123 @@ function App() {
   const [showPreloader, setShowPreloader] = useState(false);
   const [showButtonMore, setShowButtonMore] = useState(null);
   const [infoMessage, setInfoMessage] = useState('');
+  const [searchParams, setSearchParams] = useState({});
+  const [registrationMessage, setRegistrationMessage] = useState('');
 
-  // console.log('shortMoviesChecked', shortMoviesChecked);
-  // console.log('moviesFiltered', moviesFiltered);
-  // console.log('windowSize', windowSize);
-
-  // если логин false переходим на главную страницу
-  // useEffect(() => {
-  //   if (!loggedIn) {
-  //     navigate('/', { replace: true });
-  //   }
-  // }, [loggedIn]);
-
-  // фильтруем запрос по введенной фразе 2 - этап
+  // загружаем данные с локального хранилища при перезагрузке страницы
   useEffect(() => {
-    if (initialMovies.length === 0 && !searchQuery) return;
+    const json = localStorage.getItem('searchParams');
+    if (json) {
+      const searchParams = JSON.parse(json);
+      setMoviesFiltered(searchParams.movies);
+      setMessage(searchParams.movies);
+      setSearchParams({
+        shortMovies: searchParams.shortMovies,
+        query: searchParams.searchQuery,
+      });
+    }
+  }, []);
+
+  // если поиск ничего не нашел, покажем надпись об этом
+  const setMessage = (movies) => {
+    if (movies.length === 0) {
+      setInfoMessage('Ничего не найдено');
+    } else {
+      setInfoMessage('');
+    }
+  };
+
+  // сохраним результат если он не пустой в локальное хранилище
+  const saveResultToLocalStorage = (isShortMovies, searchQuery, movies) => {
+    const shortMovies = String(isShortMovies);
+    const data = JSON.stringify({
+      shortMovies,
+      searchQuery,
+      movies,
+    });
+    localStorage.setItem('searchParams', data);
+  };
+
+  // по сабмиту получаем все фильмы
+  const handleSubmitSearchForm = () => {
+    setShowPreloader(true);
+    getAllMovies()
+      .then((allMovies) => {
+        setInitialMovies(allMovies);
+      })
+      .catch((err) => {
+        if (err) {
+          setInfoMessage(
+            'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз найдено'
+          );
+        }
+      })
+      .finally(() => {
+        setShowPreloader(false);
+      });
+  };
+
+  const filterMovies = (allMovies, searchQuery, shortFilmsSelected) => {
+    // переведем поисковую фразу в нижний регистр
     const queryLowerCase = searchQuery.toLowerCase();
-    const moviesFiltered = initialMovies.filter((film) => {
-      // приведем все названия к нижнему регистру
+    const filtered = allMovies.filter((film) => {
+      // приведем все названия фильмов к нижнему регистру
       const nameRuLowerCase = film.nameRU.toLowerCase();
       const nameEnLowerCase = film.nameEN.toLowerCase();
-      return shortMoviesChecked === true
-        ? // если в них найдется ключевая фраза то вернем новый массив
-          (nameEnLowerCase.includes(queryLowerCase) ||
+      // если найдется ключевая фраза то вернем новый массив
+      return shortFilmsSelected === true
+        ? (nameEnLowerCase.includes(queryLowerCase) ||
             nameRuLowerCase.includes(queryLowerCase)) &&
             film.duration <= 40
         : nameEnLowerCase.includes(queryLowerCase) ||
             nameRuLowerCase.includes(queryLowerCase);
     });
+    return filtered;
+  };
 
-    // если поиск ничего не нашел, покажем надпись об этом
-    if (moviesFiltered.length === 0) {
-      setInfoMessage('Ничего не найдено');
+  useEffect(() => {
+    if (initialMovies.length === 0 && !searchQuery) return;
+    const moviesFiltered = filterMovies(
+      initialMovies,
+      searchQuery,
+      shortMoviesChecked
+    );
+
+    // если фильмы нашлись сохраним их и положим в стейт
+    if (moviesFiltered.length !== 0) {
+      setMoviesFiltered(moviesFiltered);
     } else {
-      setInfoMessage('');
+      setMoviesFiltered([]);
     }
 
-    setMoviesFiltered(moviesFiltered);
-  }, [initialMovies, shortMoviesChecked]);
+    saveResultToLocalStorage(shortMoviesChecked, searchQuery, moviesFiltered);
+    setMessage(moviesFiltered);
+  }, [searchQuery, initialMovies, shortMoviesChecked]);
 
-  // если инпут поиска валидный делаем запрос фильмов из апи - 1 этап
+  // фильтруем запрос по введенной фразе
+  // useEffect(() => {
+  //   if (initialMovies.length === 0 && !searchQuery) return;
+  //   const queryLowerCase = searchQuery.toLowerCase();
+  //   const filtered = initialMovies.filter((film) => {
+  //     // приведем все названия к нижнему регистру
+  //     const nameRuLowerCase = film.nameRU.toLowerCase();
+  //     const nameEnLowerCase = film.nameEN.toLowerCase();
+  //     // если найдется ключевая фраза то вернем новый массив
+  //     return shortMoviesChecked === true
+  //       ? (nameEnLowerCase.includes(queryLowerCase) ||
+  //           nameRuLowerCase.includes(queryLowerCase)) &&
+  //           film.duration <= 40
+  //       : nameEnLowerCase.includes(queryLowerCase) ||
+  //           nameRuLowerCase.includes(queryLowerCase);
+  //   });
+
+  //   checkSearchResult(filtered);
+  //   saveResultToLocalStorage(filtered);
+  //   setMoviesFiltered(filtered);
+  // }, [shortMoviesChecked, initialMovies, searchQuery]);
+
+  /*
+  // если инпут поиска не пустой делаем запрос фильмов из апи - 1 этап
   useEffect(() => {
     if (!searchQuery) return;
     setShowPreloader(true);
@@ -87,14 +167,15 @@ function App() {
         setShowPreloader(false);
       });
   }, [searchQuery]);
+*/
 
-  // узнаем ширину окна 3 -этап
+  // узнаем ширину окна
   useEffect(() => {
     if (moviesFiltered.length === 0) return;
 
     setWindowSize(window.innerWidth);
 
-    // ***при резайзе окна обновляем переменную ширины экрана***
+    // при резайзе окна обновляем переменную ширины экрана
     const handleChangeWidth = (evt) => {
       const handleTimer = () => {
         setWindowSize(evt.target.outerWidth);
@@ -111,11 +192,13 @@ function App() {
 
   // после определения ширины окна узнаем сколько карточек нужно рендерить
   useEffect(() => {
-    const renderMoviesInitially = (endCopy) => {
+    const renderMovies = (cardsNumber) => {
       // вырезаем необходимый по размеру кусок массива
-      const moviesToRender = moviesFiltered.slice(0, endCopy);
+      const moviesToRender = moviesFiltered.slice(0, cardsNumber);
+
       // отправляем новый массив на рендеринг
       setMoviesToRender(moviesToRender);
+
       /* если карточек в отфильтрованном массиве больше чем,
         в скопированном куске, значит покажем кнопку "добавить еще"*/
       if (moviesFiltered.length > moviesToRender.length) {
@@ -124,21 +207,22 @@ function App() {
         setShowButtonMore(false);
       }
     };
+
     /* в зависимости от ширины экрана устанавливаем количество 
     карточек для рендеринга и количество добавляемое кнопкой*/
     if (windowSize >= 1280) {
       setNumberCardToAdd(3);
-      renderMoviesInitially(12);
+      renderMovies(12);
     } else if (windowSize >= 768 && windowSize <= 1279) {
       setNumberCardToAdd(2);
-      renderMoviesInitially(8);
+      renderMovies(8);
     } else {
       setNumberCardToAdd(1);
-      renderMoviesInitially(5);
+      renderMovies(5);
     }
   }, [windowSize, moviesFiltered]);
 
-  // ****добавляем карточки по клику на кнопку****
+  // добавляем карточки по клику на кнопку*
   const loadMoreCards = () => {
     // узнаем с какого элемента начать копирование
     const startCopy = moviesToRender.length;
@@ -155,6 +239,22 @@ function App() {
     if (moviesFiltered.length === newMoviesList.length) {
       setShowButtonMore(false);
     }
+  };
+
+
+  // ============================================================ //
+
+  const handleRegistration = (name, email, password) => {
+    registration(name, email, password)
+    .then((data) => {
+      if(data) {
+        navigate('/signin', { replace: true });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      setRegistrationMessage(err)
+    })
   };
 
   return (
@@ -178,6 +278,8 @@ function App() {
                 showPreloader={showPreloader}
                 showButtonMore={showButtonMore}
                 infoMessage={infoMessage}
+                handleSubmitSearchForm={handleSubmitSearchForm}
+                searchParams={searchParams}
               />
             }
           />
@@ -186,7 +288,7 @@ function App() {
             path="/profile"
             element={<Profile setLoggedIn={setLoggedIn} />}
           />
-          <Route path="/signup" element={<Register />} />
+          <Route path="/signup" element={<Register handleRegistration={handleRegistration}/>} />
           <Route path="/signin" element={<Login setLoggedIn={setLoggedIn} />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>

@@ -1,17 +1,31 @@
 import './SearchForm.css';
 import { SwitchButton } from '../SwitchButton/SwitchButton';
 import { useForm } from '../../hooks/useForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export function SearchForm({ name, setSearchQuery, setShortMoviesChecked }) {
+export function SearchForm({
+  name,
+  setSearchQuery,
+  setShortMoviesChecked,
+  handleSubmitSearchForm,
+  searchParams
+}) {
   const [isInputValid, setIsInputValid] = useState(false);
-  const { values, handleChange } = useForm({
+  const { values, handleChange, setValues } = useForm({
     search: {
       isValid: '',
       validationMessage: '',
       value: '',
     },
   });
+
+  useEffect(()=>{
+    setValues({
+      search: {
+        value: searchParams.query ?? '',
+      },
+    })
+  }, [searchParams]) 
 
   // обработчик поиска
   const handleSubmit = (evt) => {
@@ -23,6 +37,7 @@ export function SearchForm({ name, setSearchQuery, setShortMoviesChecked }) {
     } else {
       setIsInputValid(false);
       setSearchQuery(values.search.value);
+      handleSubmitSearchForm();
     }
   };
 
@@ -53,6 +68,7 @@ export function SearchForm({ name, setSearchQuery, setShortMoviesChecked }) {
           title="Короткометражки"
           name="shortMovies"
           setShortMoviesChecked={setShortMoviesChecked}
+          searchParams={searchParams}
         />
         <div className="search-section__line" />
       </form>

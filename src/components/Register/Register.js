@@ -4,7 +4,7 @@ import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { PageWithForm } from '../PageWithForm/PageWithForm';
 import { useForm } from '../../hooks/useForm';
 
-export function Register() {
+export function Register({ handleRegistration }) {
   const { values, handleChange } = useForm({
     name: {
       isValid: '',
@@ -23,6 +23,19 @@ export function Register() {
     },
   });
 
+console.log(  values.name.value,
+  values.email.value,
+  values.password.value);
+
+  const onSubmit = (evt) => {
+    evt.preventDefault();
+    handleRegistration(
+      values.name.value,
+      values.email.value,
+      values.password.value
+    );
+  };
+
   return (
     <PageWithForm
       title="Добро пожаловать!"
@@ -30,6 +43,7 @@ export function Register() {
       underButtonText="Уже зарегистрированы?"
       link="/signin"
       linkName="Войти"
+      onSubmit={onSubmit}
     >
       <div className="register__container">
         <Input
