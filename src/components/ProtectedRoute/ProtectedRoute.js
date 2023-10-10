@@ -1,8 +1,6 @@
-import { Navigate } from 'react-router-dom';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
+import { ROUTES } from '../../utils/constants';
 
-export const ProtectedRoute = ({ children, loggedIn }) => {
-  return loggedIn 
-    ? children ?? <Outlet /> 
-    : <Navigate to='/signin' replace />;
+export const ProtectedRoute = ({ loggedIn, children }) => {
+  return loggedIn ? children ?? <Outlet /> : <Navigate to={ROUTES.main} replace />;
 };

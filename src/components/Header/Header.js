@@ -5,6 +5,7 @@ import { HeaderNavigation } from '../HeaderNavigation/HeaderNavigation';
 import { AccountButton } from '../AccountButton/AccountButton';
 import { BurgerMenu } from '../BurgerMenu/BurgerMenu';
 import { BurgerButton } from '../BurgerButton/BurgerButton';
+import { ROUTES } from '../../utils/constants';
 import './Header.css';
 
 export function Header({ loggedIn }) {
@@ -16,12 +17,12 @@ export function Header({ loggedIn }) {
         <nav className="header__menu">
           <ul className='header__menu-list'>
             <li className="header__menu-item">
-              <Link to="/signup" className="header__register-link">
+              <Link to={ROUTES.register} className="header__register-link">
                 Регистрация
               </Link>
             </li>
             <li className="header__menu-item">
-              <Link to="/signin" className="header__login-button">
+              <Link to={ROUTES.login} className="header__login-button">
                 Войти
               </Link>
             </li>

@@ -2,11 +2,13 @@ import './Login.css';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { PageWithForm } from '../PageWithForm/PageWithForm';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 
-export function Login({ handleLogin }) {
-  const navigate = useNavigate();
+import { ROUTES, EMAIL_REGEX } from '../../utils/constants';
+import { useEffect, useState } from 'react';
+
+export function Login({ handleLogin, loginMessage, setLoginMessage }) {
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { values, handleChange } = useForm({
     email: {
@@ -21,17 +23,37 @@ export function Login({ handleLogin }) {
     },
   });
 
+  useEffect(() => {
+    setLoginMessage('')
+  }, [values])
+
   const onSubmit = (evt) => {
     evt.preventDefault();
     handleLogin(values.email.value, values.password.value);
   };
+
+  useEffect(() => {
+    if (loginMessage === 401) {
+      setErrorMessage('Вы ввели неправильный логин или пароль.');
+    }
+    if (loginMessage === 400) {
+      setErrorMessage('Переданы некорректные данные');
+    }
+    if (loginMessage === 500) {
+      setErrorMessage('500 На сервере произошла ошибка');
+    }
+    if (loginMessage === 404) {
+      setErrorMessage('404 Страница по указанному маршруту не найдена');
+    }
+    if (!loginMessage) setErrorMessage('');
+  }, [loginMessage]);
 
   return (
     <PageWithForm
       title="Рады видеть!"
       formName="login-form"
       underButtonText="Ещё не зарегистрированы?"
-      link="/signup"
+      link={ROUTES.register}
       linkName="Регистрация"
       onSubmit={onSubmit}
     >
@@ -47,6 +69,7 @@ export function Login({ handleLogin }) {
           minLength="2"
           maxLength="30"
           placeholder="example@example.com"
+          pattern={EMAIL_REGEX}
         />
         <Input
           name="password"
@@ -58,11 +81,9 @@ export function Login({ handleLogin }) {
           validationMessage={values.password.validationMessage}
           minLength="8"
           maxLength="30"
-          placeholder="Ваш пароль"
+          placeholder="Мин. длина 8 символов"
         />
-        <span className="login__error">
-          Вы ввели неправильный логин или пароль.
-        </span>
+        {loginMessage && <span className="login__error">{errorMessage}</span>}
       </div>
       <SubmitButton
         title="Войти"

@@ -3,8 +3,6 @@ const BASE_URL =
     ? process.env.REACT_APP_BASE_URL
     : 'http://localhost:3001';
 
-const token = localStorage.getItem('jwt') ?? '';
-
 // регистрация
 export const registration = (name, email, password) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -28,12 +26,12 @@ export const login = (email, password) => {
 };
 
 // проверка токена
-export const checkToken = (token) => {
+export const checkToken = (jwt) => {
   return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${jwt}`,
     },
   }).then(getResponse);
 };
@@ -44,7 +42,7 @@ export const updateProfile = (name, email) => {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
     },
     body: JSON.stringify({ name, email }),
   }).then(getResponse);
@@ -56,7 +54,7 @@ export const addMovieToSave = (movie) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
     },
     body: JSON.stringify({
       country: movie.country,
@@ -64,18 +62,40 @@ export const addMovieToSave = (movie) => {
       duration: movie.duration,
       year: movie.year,
       description: movie.description,
-      image: movie.image.url,
+      image: `https://api.nomoreparties.co${movie.image.url}`,
       trailerLink: movie.trailerLink,
       nameRU: movie.nameRU,
       nameEN: movie.nameEN,
-      thumbnail: movie.image.formats.thumbnail.url,
-      movieId: movie.movieId,
+      thumbnail: `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`,
+      movieId: movie.id,
     }),
-  });
+  }).then(getResponse);
+};
+
+// удаление фильма
+export const deleteSaveMovie = (movieId) => {
+  return fetch(`${BASE_URL}/movies/${movieId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    },
+  }).then(getResponse);
+};
+
+// получение всех сохраненных фильмов
+export const getSavedMovies = () => {
+  return fetch(`${BASE_URL}/movies`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    },
+  }).then(getResponse);
 };
 
 const getResponse = (res) => {
   return res.ok
     ? res.json()
-    : Promise.reject(`произошла ошибка: ${res.status}`);
+    : Promise.reject({ status: res.status });
 };

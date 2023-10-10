@@ -6,9 +6,7 @@ import { MoviesCard } from '../MoviesCard/MoviesCard';
 import { InfoMessage } from '../InfoMessage/InfoMessage';
 
 export function Movies({
-  setSearchQuery,
   moviesToRender,
-  setShortMoviesChecked,
   loadMoreCards,
   showPreloader,
   showButtonMore,
@@ -16,6 +14,8 @@ export function Movies({
   handleSubmitSearchForm,
   searchParams,
   handleSaveMovie,
+  handleDeleteMovie,
+  setShortMoviesChecked,
 }) {
   const handleClick = () => {
     loadMoreCards();
@@ -24,10 +24,9 @@ export function Movies({
     <section className="movies">
       <SearchForm
         name="search-movies"
-        setSearchQuery={setSearchQuery}
-        setShortMoviesChecked={setShortMoviesChecked}
         handleSubmitSearchForm={handleSubmitSearchForm}
         searchParams={searchParams}
+        setShortMoviesChecked={setShortMoviesChecked}
       />
       {showPreloader && <Preloader />}
       {moviesToRender.length === 0 || showPreloader ? (
@@ -38,6 +37,7 @@ export function Movies({
             return (
               <MoviesCard
                 handleSaveMovie={handleSaveMovie}
+                handleDeleteMovie={handleDeleteMovie}
                 movie={movie}
                 key={movie.id}
               />

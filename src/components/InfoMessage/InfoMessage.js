@@ -1,7 +1,5 @@
-import './InfoMessage.css'
+import './InfoMessage.css';
 
-export function InfoMessage({message}) {
-  return (
-    <p className='no-result'>{message}</p>
-  )
+export function InfoMessage({ message }) {
+  return <p className="no-result">{message}</p>;
 }

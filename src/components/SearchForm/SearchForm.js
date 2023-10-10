@@ -5,10 +5,9 @@ import { useEffect, useState } from 'react';
 
 export function SearchForm({
   name,
-  setSearchQuery,
-  setShortMoviesChecked,
   handleSubmitSearchForm,
-  searchParams
+  searchParams,
+  setShortMoviesChecked
 }) {
   const [isInputValid, setIsInputValid] = useState(false);
   const { values, handleChange, setValues } = useForm({
@@ -19,13 +18,13 @@ export function SearchForm({
     },
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     setValues({
       search: {
         value: searchParams.query ?? '',
       },
-    })
-  }, [searchParams]) 
+    });
+  }, [searchParams]);
 
   // обработчик поиска
   const handleSubmit = (evt) => {
@@ -36,8 +35,7 @@ export function SearchForm({
       setIsInputValid(true);
     } else {
       setIsInputValid(false);
-      setSearchQuery(values.search.value);
-      handleSubmitSearchForm();
+      handleSubmitSearchForm(values.search.value);
     }
   };
 

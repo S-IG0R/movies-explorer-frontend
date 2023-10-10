@@ -1,0 +1,107 @@
+@-webkit-keyframes slide-left {
+  0% {
+    -webkit-transform: translateX(350px);
+    transform: translateX(350px);
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+@keyframes slide-left {
+  0% {
+    -webkit-transform: translateX(350px);
+    transform: translateX(350px);
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+
+@-webkit-keyframes slide-right {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  100% {
+    -webkit-transform: translateX(350px);
+    transform: translateX(350px);
+  }
+}
+@keyframes slide-right {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  100% {
+    -webkit-transform: translateX(350px);
+    transform: translateX(350px);
+  }
+}
+
+.info-tooltip {
+  position: fixed;
+  width: 300px;
+  min-height: 110px;
+  border-radius: 15px;
+  bottom: 25px;
+  right: 25px;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  background-color: rgba(220, 220, 220, 0.9);
+  display: flex;
+}
+
+@media (max-width: 767.98px) {
+  .info-tooltip {
+    bottom: 14px;
+    right: 14px;
+    width: 292px;
+    min-height: 90px;
+  }
+}
+
+.info-tooltip__message {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px;
+  color: #3d3d3d;
+  margin: auto;
+}
+
+@media (max-width: 767.98px) {
+  .info-tooltip__message {
+    font-size: 14px;
+  }
+}
+
+.info-tooltip__button {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: rgb(185, 185, 185);
+  border: 1px solid rgb(171, 171, 171);
+  position: absolute;
+  top: 11px;
+  right: 11px;
+  transition: background-color 0.5s, transform 0.5s;
+}
+
+.info-tooltip__button:hover {
+  background-color: #eb6b66;
+  border: 0.5px solid #cc6158;
+  transform: scale(1.2);
+}
+
+.info-tooltip_active {
+  -webkit-animation: slide-left 0.35s ease-out forwards;
+  animation: slide-left 0.35s ease-out forwards;
+}
+
+.info-tooltip_inactive {
+  -webkit-animation: slide-right 0.35s ease-out forwards;
+  animation: slide-right 0.35s ease-out forwards;
+}

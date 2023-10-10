@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import './SwitchButton.css';
 import { useForm } from '../../hooks/useForm';
 
@@ -10,8 +10,6 @@ export function SwitchButton({
 }) {
   const { values, handleChange, setValues } = useForm({
     shortMovies: {
-      // isValid: '',
-      // validationMessage: '',
       value: '',
       isChecked: '',
     },
@@ -22,17 +20,11 @@ export function SwitchButton({
   }, [handleChange]);
 
   useEffect(() => {
-    const searchParams = localStorage.getItem('searchParams');
-    if (searchParams) {
-      const params = JSON.parse(searchParams);
-      const checkboxState = params.shortMovies;
-      if (checkboxState === 'true') {
-        setValues({ shortMovies: { isChecked: true } });
-      } else {
-        setValues({ shortMovies: { isChecked: false } });
-      }
-      
-    }
+    setValues({
+      shortMovies: {
+        isChecked: searchParams.shortMovies === 'true' ? true : false,
+      },
+    });
   }, []);
 
   return (

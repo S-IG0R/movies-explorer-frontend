@@ -1,9 +1,22 @@
 import './Profile.css';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from '../../hooks/useForm';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import {
+  EMAIL_REGEX,
+  NAME_REGEX,
+  NAME_HINT,
+  EMAIL_HINT,
+} from '../../utils/constants';
 
-export function Profile({ setLoggedIn, handleUpdateProfile, handleLogout }) {
+export function Profile({
+  handleUpdateProfile,
+  handleLogout,
+  profileMessage,
+  setProfileMessage,
+}) {
+  const [errorMessage, setErrorMessage] = useState('');
+
   const currentUser = React.useContext(CurrentUserContext);
 
   const { values, handleChange, setValues } = useForm({
@@ -38,6 +51,29 @@ export function Profile({ setLoggedIn, handleUpdateProfile, handleLogout }) {
   const onLogout = () => {
     handleLogout();
   };
+
+  useEffect(() => {
+    if (profileMessage === 409) {
+      setErrorMessage('Пользователь с таким email уже существует');
+    }
+    if (profileMessage === 400) {
+      setErrorMessage('При обновлении профиля произошла ошибка.');
+    }
+    if (profileMessage === 500) {
+      setErrorMessage('500 На сервере произошла ошибка.');
+    }
+    if (profileMessage === 404) {
+      setErrorMessage('404 Страница по указанному маршруту не найдена.');
+    }
+    if (!profileMessage) {
+      setErrorMessage('');
+    }
+  }, [profileMessage]);
+
+  useEffect(() => {
+    setProfileMessage('');
+  }, [values]);
+
   return (
     <section className="profile">
       <h1 className="profile__name">{`Привет, ${currentUser?.name}!`}</h1>
@@ -57,8 +93,9 @@ export function Profile({ setLoggedIn, handleUpdateProfile, handleLogout }) {
             name="name"
             value={values.name.value}
             onChange={handleChange}
-            minLength="2"
-            maxLength="30"
+            title={NAME_HINT}
+            pattern={NAME_REGEX}
+            placeholder="Иван Петров"
             required
           />
           <span className="profile__input-error">
@@ -75,6 +112,9 @@ export function Profile({ setLoggedIn, handleUpdateProfile, handleLogout }) {
             name="email"
             value={values.email.value}
             onChange={handleChange}
+            title={EMAIL_HINT}
+            placeholder="example@example.com"
+            pattern={EMAIL_REGEX}
             required
           />
           <span className="profile__input-error">
@@ -82,9 +122,9 @@ export function Profile({ setLoggedIn, handleUpdateProfile, handleLogout }) {
           </span>
         </label>
         <div className="profile__button-container">
-          <span className="profile__error">
-            При обновлении профиля произошла ошибка.
-          </span>
+          {profileMessage && (
+            <span className="profile__error">{errorMessage}</span>
+          )}
           <button
             className={`profile__button-edit ${
               values.email.isValid && values.name.isValid

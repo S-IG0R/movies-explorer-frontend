@@ -1,20 +1,17 @@
-import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './MoviesCard.css';
 
 export function MoviesCard({ handleSaveMovie, movie, handleDeleteMovie }) {
   const location = useLocation().pathname;
-  const [isSaved, setIsSaved] = useState(false);
 
   const onSaveMovie = () => {
     handleSaveMovie(movie);
-    setIsSaved(!isSaved);
   };
 
   const onDeleteMovie = () => {
     handleDeleteMovie(movie);
   };
-
+  // console.log('movie in card', movie);
   return (
     <li className="card">
       <div className="card__container">
@@ -22,7 +19,7 @@ export function MoviesCard({ handleSaveMovie, movie, handleDeleteMovie }) {
         {location === '/movies' ? (
           <button
             className={`card__button-save ${
-              !isSaved && `card__button-save_active`
+              !movie.isMovieSaved && `card__button-save_active`
             }`}
             onClick={onSaveMovie}
           >
@@ -38,7 +35,11 @@ export function MoviesCard({ handleSaveMovie, movie, handleDeleteMovie }) {
           ''
         )}
         <div
-          className={`card__label-tip ${isSaved && `card__label-tip_active`}`}
+          role="button"
+          onClick={onDeleteMovie}
+          className={`card__label-tip ${
+            movie.isMovieSaved && `card__label-tip_active`
+          }`}
         />
         <a
           className="card__link"
@@ -48,13 +49,17 @@ export function MoviesCard({ handleSaveMovie, movie, handleDeleteMovie }) {
         >
           <img
             className="card__image"
-            src={`https://api.nomoreparties.co${movie.image.url}`}
-            alt={movie.title}
+            src={
+              movie.image.url
+                ? `https://api.nomoreparties.co${movie.image.url}`
+                : movie.image
+            }
+            alt={movie.nameRU}
           />
         </a>
       </div>
       <div className="card__data-container">
-        <p className="card__title">{movie.title}</p>
+        <p className="card__title">{movie.nameRU}</p>
         <div className="card__duration-container">
           <p className="card__duration-value">
             {movie.duration >= 60

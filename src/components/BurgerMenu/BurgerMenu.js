@@ -1,7 +1,25 @@
+import { useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import { ROUTES } from '../../utils/constants';
 import './BurgerMenu.css';
 
 export function BurgerMenu({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
+
+  // если ширина экрана больше указанной закрываем меню бургер
+  useEffect(() => {
+    const handleChangeWidth = (evt) => {
+      if (evt.target.outerWidth >= 1023) {
+        handleClickClose();
+      }
+    };
+    if (isBurgerMenuOpen) {
+      window.addEventListener('resize', handleChangeWidth);
+    }
+    return () => {
+      window.removeEventListener('resize', handleChangeWidth);
+    };
+  }, [isBurgerMenuOpen]);
+
   const handleClickClose = () => {
     setIsBurgerMenuOpen(false);
   };
@@ -19,7 +37,7 @@ export function BurgerMenu({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
                   : 'burger-menu__link'
               }`
             }
-            to="/"
+            to={ROUTES.main}
           >
             Главная
           </NavLink>
@@ -34,7 +52,7 @@ export function BurgerMenu({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
                   : 'burger-menu__link'
               }`
             }
-            to="/movies"
+            to={ROUTES.movies}
           >
             Фильмы
           </NavLink>
@@ -49,7 +67,7 @@ export function BurgerMenu({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
                   : 'burger-menu__link'
               }`
             }
-            to="/saved-movies"
+            to={ROUTES.savedMovies}
           >
             Сохранённые фильмы
           </NavLink>
@@ -58,7 +76,7 @@ export function BurgerMenu({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
           <Link
             onClick={handleClickClose}
             className="burger-menu__profile-button"
-            to="/profile"
+            to={ROUTES.profile}
           >
             Аккаунт
           </Link>
