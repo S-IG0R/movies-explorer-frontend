@@ -327,6 +327,7 @@ function App() {
 
   // фильтрация сохраненных фильмов
   useEffect(() => {
+    if(savedMovies.length === 0) return;
     const moviesFiltered = filterMovies(
       savedMovies,
       searchQuerySavedMov,
