@@ -7,7 +7,8 @@ export function SearchForm({
   name,
   handleSubmitSearchForm,
   searchParams,
-  setShortMoviesChecked
+  setShortMoviesChecked,
+  disableInput
 }) {
   const [isInputValid, setIsInputValid] = useState(false);
   const { values, handleChange, setValues } = useForm({
@@ -21,7 +22,7 @@ export function SearchForm({
   useEffect(() => {
     setValues({
       search: {
-        value: searchParams.query ?? '',
+        value: searchParams.query ?? values.search.value,
       },
     });
   }, [searchParams]);
@@ -58,6 +59,7 @@ export function SearchForm({
             minLength="1"
             value={values.search.value}
             onChange={handleChange}
+            disabled={disableInput}
             required
           />
           <button className="search-section__submit-button" type="submit" />

@@ -14,6 +14,7 @@ export function Profile({
   handleLogout,
   profileMessage,
   setProfileMessage,
+  disableInput
 }) {
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -96,6 +97,7 @@ export function Profile({
             title={NAME_HINT}
             pattern={NAME_REGEX}
             placeholder="Иван Петров"
+            disabled={disableInput}
             required
           />
           <span className="profile__input-error">
@@ -115,6 +117,7 @@ export function Profile({
             title={EMAIL_HINT}
             placeholder="example@example.com"
             pattern={EMAIL_REGEX}
+            disabled={disableInput}
             required
           />
           <span className="profile__input-error">

@@ -11,7 +11,7 @@ export function MoviesCard({ handleSaveMovie, movie, handleDeleteMovie }) {
   const onDeleteMovie = () => {
     handleDeleteMovie(movie);
   };
-  // console.log('movie in card', movie);
+  
   return (
     <li className="card">
       <div className="card__container">

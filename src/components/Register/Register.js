@@ -7,7 +7,12 @@ import { useForm } from '../../hooks/useForm';
 import { ROUTES, EMAIL_REGEX, NAME_REGEX } from '../../utils/constants';
 import { useEffect, useState } from 'react';
 
-export function Register({ handleRegistration, registrationMessage, setRegistrationMessage }) {
+export function Register({
+  handleRegistration,
+  registrationMessage,
+  setRegistrationMessage,
+  disableInput,
+}) {
   const [errorMessage, setErrorMessage] = useState('');
   const { values, handleChange } = useForm({
     name: {
@@ -37,8 +42,8 @@ export function Register({ handleRegistration, registrationMessage, setRegistrat
   };
 
   useEffect(() => {
-    setRegistrationMessage('')
-  }, [values])
+    setRegistrationMessage('');
+  }, [values]);
 
   useEffect(() => {
     if (registrationMessage === 409) {
@@ -53,8 +58,8 @@ export function Register({ handleRegistration, registrationMessage, setRegistrat
     if (registrationMessage === 404) {
       setErrorMessage('404 Страница по указанному маршруту не найдена');
     }
-    if(!registrationMessage) {
-      setErrorMessage('')
+    if (!registrationMessage) {
+      setErrorMessage('');
     }
   }, [registrationMessage]);
 
@@ -78,6 +83,7 @@ export function Register({ handleRegistration, registrationMessage, setRegistrat
           validationMessage={values.name.validationMessage}
           placeholder="Иван Петров"
           pattern={NAME_REGEX}
+          disabled={disableInput}
         />
         <Input
           name="email"
@@ -89,6 +95,7 @@ export function Register({ handleRegistration, registrationMessage, setRegistrat
           validationMessage={values.email.validationMessage}
           placeholder="example@example.com"
           pattern={EMAIL_REGEX}
+          disabled={disableInput}
         />
         <Input
           name="password"
@@ -101,6 +108,7 @@ export function Register({ handleRegistration, registrationMessage, setRegistrat
           minLength="8"
           maxLength="30"
           placeholder="Мин. длина 8 символов"
+          disabled={disableInput}
         />
         {registrationMessage && (
           <span className="register__error">{errorMessage}</span>

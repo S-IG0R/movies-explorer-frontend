@@ -1,7 +1,7 @@
-const BASE_URL = 'https://api.nomoreparties.co/beatfilm-movies';
+import { BASE_URL_MOVIES } from "./constants";
 
 export const getAllMovies = () => {
-  return fetch(BASE_URL, sendGetRequest).then(getResponse);
+  return fetch(BASE_URL_MOVIES, sendGetRequest).then(getResponse);
 };
 
 const sendGetRequest = () => {

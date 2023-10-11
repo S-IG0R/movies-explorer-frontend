@@ -1,7 +1,5 @@
 import { BASE_URL } from "./constants";
 
-console.log(BASE_URL);
-
 // регистрация
 export const registration = (name, email, password) => {
   return fetch(`${BASE_URL}/signup`, {

@@ -16,6 +16,7 @@ export function Movies({
   handleSaveMovie,
   handleDeleteMovie,
   setShortMoviesChecked,
+  disableInput,
 }) {
   const handleClick = () => {
     loadMoreCards();
@@ -27,6 +28,7 @@ export function Movies({
         handleSubmitSearchForm={handleSubmitSearchForm}
         searchParams={searchParams}
         setShortMoviesChecked={setShortMoviesChecked}
+        disableInput={disableInput}
       />
       {showPreloader && <Preloader />}
       {moviesToRender.length === 0 || showPreloader ? (

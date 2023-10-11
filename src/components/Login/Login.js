@@ -7,7 +7,12 @@ import { useForm } from '../../hooks/useForm';
 import { ROUTES, EMAIL_REGEX } from '../../utils/constants';
 import { useEffect, useState } from 'react';
 
-export function Login({ handleLogin, loginMessage, setLoginMessage }) {
+export function Login({
+  handleLogin,
+  loginMessage,
+  setLoginMessage,
+  disableInput,
+}) {
   const [errorMessage, setErrorMessage] = useState('');
 
   const { values, handleChange } = useForm({
@@ -24,8 +29,8 @@ export function Login({ handleLogin, loginMessage, setLoginMessage }) {
   });
 
   useEffect(() => {
-    setLoginMessage('')
-  }, [values])
+    setLoginMessage('');
+  }, [values]);
 
   const onSubmit = (evt) => {
     evt.preventDefault();
@@ -70,6 +75,7 @@ export function Login({ handleLogin, loginMessage, setLoginMessage }) {
           maxLength="30"
           placeholder="example@example.com"
           pattern={EMAIL_REGEX}
+          disabled={disableInput}
         />
         <Input
           name="password"
@@ -82,6 +88,7 @@ export function Login({ handleLogin, loginMessage, setLoginMessage }) {
           minLength="8"
           maxLength="30"
           placeholder="Мин. длина 8 символов"
+          disabled={disableInput}
         />
         {loginMessage && <span className="login__error">{errorMessage}</span>}
       </div>

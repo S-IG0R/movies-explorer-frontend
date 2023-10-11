@@ -56,6 +56,7 @@ function App() {
   const [renderSaveMov, setRenderSaveMov] = useState([]);
   const [isAppInited, setAppIsInited] = useState(false);
   const [tooltipMessage, setTooltipMessage] = useState('');
+  const [disableInput, setDisableInput] = useState(false);
 
   const initUser = useCallback(async () => {
     const token = localStorage.getItem('jwt');
@@ -94,9 +95,7 @@ function App() {
           setRenderSaveMov(savedMovies);
         })
         .catch((err) => {
-          setTooltipMessage(
-            `Ошибка загрузки фильмов. Статус ${err.status}`
-          );
+          setTooltipMessage(`Ошибка загрузки фильмов. Статус ${err.status}`);
         });
     }
   }, [loggedIn]);
@@ -111,6 +110,7 @@ function App() {
   }, [loggedIn, location]);
 
   const handleRegistration = (name, email, password) => {
+    setDisableInput(true);
     registration(name, email, password)
       .then((data) => {
         if (data) {
@@ -121,10 +121,14 @@ function App() {
       })
       .catch((err) => {
         setRegistrationMessage(err.status);
+      })
+      .finally(() => {
+        setDisableInput(false);
       });
   };
 
   const handleLogin = (email, password) => {
+    setDisableInput(true);
     login(email, password)
       .then((res) => {
         if (res.token) {
@@ -138,6 +142,9 @@ function App() {
       })
       .catch((err) => {
         setLoginMessage(err.status);
+      })
+      .finally(() => {
+        setDisableInput(false);
       });
   };
 
@@ -148,16 +155,20 @@ function App() {
     setMoviesFiltered([]);
     setMoviesToRender([]);
     setSavedMovies([]);
+    setSearchQuerySavedMov('');
     setRenderSaveMov([]);
     setSearchQuery('');
     setShortMoviesChecked(false);
+    setShortMoviesSavedMov(false);
     setLoggedIn(false);
     setTooltipMessage(`До скорой встречи ${currentUser?.name}!`);
     setCurrentUser(null);
+    setDisableInput(false);
     navigate(ROUTES.main, { replace: true });
   };
 
   const handleUpdateProfile = (name, email) => {
+    setDisableInput(true);
     updateProfile(name, email)
       .then((updatedUser) => {
         setCurrentUser(updatedUser);
@@ -170,6 +181,9 @@ function App() {
         } else {
           setProfileMessage(err.status);
         }
+      })
+      .finally(() => {
+        setDisableInput(false);
       });
   };
 
@@ -261,10 +275,9 @@ function App() {
   // самбит поиска по всем фильмам
   const handleSubmitSearchForm = (searchQuery) => {
     setSearchQuery(searchQuery);
-
     const moviesFromLocalStorage = localStorage.getItem('movies');
-
     if (!moviesFromLocalStorage) {
+      setDisableInput(true);
       setShowPreloader(true);
       getAllMovies()
         .then((allMovies) => {
@@ -280,6 +293,7 @@ function App() {
         })
         .finally(() => {
           setShowPreloader(false);
+          setDisableInput(false);
         });
     } else {
       setInitialMovies(JSON.parse(moviesFromLocalStorage));
@@ -322,7 +336,7 @@ function App() {
     } else {
       setInfoMessageSavedMov('');
     }
-
+    
     setRenderSaveMov(moviesFiltered);
   }, [searchQuerySavedMov, shortMoviesSavedMov, savedMovies]);
 
@@ -334,14 +348,12 @@ function App() {
       searchQuery,
       shortMoviesChecked
     );
-
     // если фильмы нашлись сохраним их и положим в стейт
     if (moviesFiltered.length !== 0) {
       setMoviesFiltered(moviesFiltered);
     } else {
       setMoviesFiltered([]);
     }
-
     saveResultToLocalStorage(shortMoviesChecked, searchQuery, moviesFiltered);
     setMessage(moviesFiltered);
   }, [searchQuery, initialMovies, shortMoviesChecked]);
@@ -457,6 +469,7 @@ function App() {
                     handleSaveMovie={handleSaveMovie}
                     handleDeleteMovie={handleDeleteMovie}
                     setShortMoviesChecked={setShortMoviesChecked}
+                    disableInput={disableInput}
                   />
                 </ProtectedRoute>
               }
@@ -472,6 +485,7 @@ function App() {
                     setShortMoviesChecked={setShortMoviesSavedMov}
                     moviesToRender={renderSaveMov}
                     infoMessage={infoMessageSavedMov}
+                    disableInput={disableInput}
                   />
                 </ProtectedRoute>
               }
@@ -485,6 +499,7 @@ function App() {
                     handleUpdateProfile={handleUpdateProfile}
                     profileMessage={profileMessage}
                     setProfileMessage={setProfileMessage}
+                    disableInput={disableInput}
                   />
                 </ProtectedRoute>
               }
@@ -496,6 +511,7 @@ function App() {
                   handleRegistration={handleRegistration}
                   registrationMessage={registrationMessage}
                   setRegistrationMessage={setRegistrationMessage}
+                  disableInput={disableInput}
                 />
               }
             />
@@ -506,6 +522,7 @@ function App() {
                   handleLogin={handleLogin}
                   loginMessage={loginMessage}
                   setLoginMessage={setLoginMessage}
+                  disableInput={disableInput}
                 />
               }
             />

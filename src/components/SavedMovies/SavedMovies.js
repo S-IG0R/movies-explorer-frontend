@@ -12,7 +12,8 @@ export function SavedMovies({
   moviesToRender,
   handleSaveMovie,
   handleDeleteMovie,
-  infoMessage
+  infoMessage,
+  disableInput
 }) {
   return (
     <section className="saved-movies">
@@ -21,7 +22,8 @@ export function SavedMovies({
         setSearchQuery={setSearchQuery}
         setShortMoviesChecked={setShortMoviesChecked}
         handleSubmitSearchForm={handleSubmitSearchForm}
-        searchParams=''
+        searchParams={{}}
+        disableInput={disableInput}
       />
       <MoviesCardList>
         {moviesToRender.map((movie) => {

@@ -10,7 +10,8 @@ export function Input({
   minLength,
   maxLength,
   placeholder,
-  pattern
+  pattern,
+  disabled
 }) {
   return (
     <div className="input__container">
@@ -29,6 +30,7 @@ export function Input({
         maxLength={maxLength}
         placeholder={placeholder}
         pattern={pattern}
+        disabled={disabled}
       />
       <span className="input__error">{validationMessage}</span>
     </div>
