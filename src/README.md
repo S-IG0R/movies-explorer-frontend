@@ -4,5 +4,6 @@
 ## Макет
 dark-2
 
-## Инфо
-Для отображения неавторизованного header необходимо нажать "Выйти из аккаунта".
+## Проект
+[Frontend](https://cinematic.nomoredomainsrocks.ru)
+[Backend](https://api.cinematic.nomoredomainsrocks.ru)
