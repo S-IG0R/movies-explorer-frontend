@@ -14,3 +14,8 @@ export const EMAIL_HINT =
 export const NAME_REGEX = '[\\-a-zA-Zа-яёА-ЯЁ ]{2,30}';
 export const NAME_HINT =
   'Имя может содержать кириллицу, латиницу, пробел и дефис';
+
+export const BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_BASE_URL
+    : 'http://localhost:3001';

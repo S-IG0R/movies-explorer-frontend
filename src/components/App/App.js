@@ -95,7 +95,7 @@ function App() {
         })
         .catch((err) => {
           setTooltipMessage(
-            `При загрузки фильмов произошла ошибка ${err.status}`
+            `Ошибка загрузки фильмов. Статус ${err.status}`
           );
         });
     }
@@ -166,7 +166,7 @@ function App() {
       })
       .catch((err) => {
         if (err.status === 401) {
-          setTooltipMessage(`Проблема авторизации ${err.status}`);
+          setTooltipMessage(`Проблема авторизации. Статус ${err.status}`);
         } else {
           setProfileMessage(err.status);
         }

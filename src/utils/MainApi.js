@@ -1,7 +1,6 @@
-const BASE_URL =
-  process.env.NODE_ENV === 'production'
-    ? process.env.REACT_APP_BASE_URL
-    : 'http://localhost:3001';
+import { BASE_URL } from "./constants";
+
+console.log(BASE_URL);
 
 // регистрация
 export const registration = (name, email, password) => {
