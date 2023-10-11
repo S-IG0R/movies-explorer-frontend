@@ -29,6 +29,7 @@ export function Movies({
         searchParams={searchParams}
         setShortMoviesChecked={setShortMoviesChecked}
         disableInput={disableInput}
+
       />
       {showPreloader && <Preloader />}
       {moviesToRender.length === 0 || showPreloader ? (

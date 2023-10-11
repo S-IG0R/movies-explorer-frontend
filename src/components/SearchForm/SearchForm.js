@@ -8,7 +8,7 @@ export function SearchForm({
   handleSubmitSearchForm,
   searchParams,
   setShortMoviesChecked,
-  disableInput
+  disableInput,
 }) {
   const [isInputValid, setIsInputValid] = useState(false);
   const { values, handleChange, setValues } = useForm({

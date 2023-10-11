@@ -296,6 +296,7 @@ function App() {
           setDisableInput(false);
         });
     } else {
+      setShowPreloader(true);
       setInitialMovies(JSON.parse(moviesFromLocalStorage));
     }
   };
@@ -303,6 +304,7 @@ function App() {
   // сабмит поиска по сохр. фильмам
   const handleSubmitSearchSavedMovies = (searchQuery) => {
     setSearchQuerySavedMov(searchQuery);
+    setShowPreloader(true);
   };
 
   const filterMovies = (allMovies, searchQuery, shortFilmsSelected) => {
@@ -336,9 +338,9 @@ function App() {
     } else {
       setInfoMessageSavedMov('');
     }
-    
+    setShowPreloader(false);
     setRenderSaveMov(moviesFiltered);
-  }, [searchQuerySavedMov, shortMoviesSavedMov, savedMovies]);
+  }, [searchQuerySavedMov, shortMoviesSavedMov, savedMovies, showPreloader]);
 
   // фильтрация начальных карточек
   useEffect(() => {
@@ -354,6 +356,7 @@ function App() {
     } else {
       setMoviesFiltered([]);
     }
+    setShowPreloader(false);
     saveResultToLocalStorage(shortMoviesChecked, searchQuery, moviesFiltered);
     setMessage(moviesFiltered);
   }, [searchQuery, initialMovies, shortMoviesChecked]);
@@ -486,6 +489,7 @@ function App() {
                     moviesToRender={renderSaveMov}
                     infoMessage={infoMessageSavedMov}
                     disableInput={disableInput}
+                    showPreloader={showPreloader}
                   />
                 </ProtectedRoute>
               }
