@@ -327,14 +327,16 @@ function App() {
 
   // фильтрация сохраненных фильмов
   useEffect(() => {
-    if(savedMovies.length === 0) return;
     const moviesFiltered = filterMovies(
       savedMovies,
       searchQuerySavedMov,
       shortMoviesSavedMov
     );
 
-    if (moviesFiltered.length === 0) {
+    if (
+      (searchQuerySavedMov || shortMoviesSavedMov) &&
+      moviesFiltered.length === 0
+    ) {
       setInfoMessageSavedMov('Ничего не найдено');
     } else {
       setInfoMessageSavedMov('');
@@ -410,7 +412,7 @@ function App() {
       }
     };
 
-    /* в зависимости от ширины экрана устанавливаем количество 
+    /* в зависимости от ширины экрана устанавливаем количество
     карточек для рендеринга и количество добавляемое кнопкой*/
     if (windowSize >= 1200) {
       setNumberCardToAdd(3);
