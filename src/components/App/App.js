@@ -150,8 +150,10 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem('jwt');
-    localStorage.removeItem('searchParams');
     localStorage.removeItem('movies');
+    localStorage.removeItem('searchQuery');
+    localStorage.removeItem('shortMovies');
+    localStorage.removeItem('foundMovies');
     setWindowSize(null);
     setSearchQuery('');
     setSearchQuerySavedMov('');
