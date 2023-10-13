@@ -151,19 +151,31 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('jwt');
     localStorage.removeItem('searchParams');
-    setInitialMovies([]);
-    setMoviesFiltered([]);
-    setMoviesToRender([]);
-    setSavedMovies([]);
-    setSearchQuerySavedMov('');
-    setRenderSaveMov([]);
+    localStorage.removeItem('movies');
+    setWindowSize(null);
     setSearchQuery('');
+    setSearchQuerySavedMov('');
     setShortMoviesChecked(false);
     setShortMoviesSavedMov(false);
+    setMoviesFiltered([]);
+    setInitialMovies([]);
+    setNumberCardToAdd(null);
+    setMoviesToRender([]);
+    setShowPreloader(false);
+    setShowButtonMore(null);
+    setInfoMessage('');
+    setInfoMessageSavedMov('');
+    setSearchParams({});
+    setRegistrationMessage('');
+    setLoginMessage('');
+    setProfileMessage('');
+    setSavedMovies([]);
     setLoggedIn(false);
+    setRenderSaveMov([]);
+    setTooltipMessage('');
+    setDisableInput(false);
     setTooltipMessage(`До скорой встречи ${currentUser?.name}!`);
     setCurrentUser(null);
-    setDisableInput(false);
     navigate(ROUTES.main, { replace: true });
   };
 
@@ -347,18 +359,21 @@ function App() {
 
   // фильтрация начальных карточек
   useEffect(() => {
-    if (initialMovies.length === 0 && !searchQuery) return;
+    // if (initialMovies.length === 0 && !searchQuery) return;
+    if (!searchQuery) return;
     const moviesFiltered = filterMovies(
       initialMovies,
       searchQuery,
       shortMoviesChecked
     );
     // если фильмы нашлись сохраним их и положим в стейт
-    if (moviesFiltered.length !== 0) {
-      setMoviesFiltered(moviesFiltered);
-    } else {
-      setMoviesFiltered([]);
-    }
+    // if (moviesFiltered.length !== 0) {
+    //   setMoviesFiltered(moviesFiltered);
+    // } else {
+    //   setMoviesFiltered([]);
+    // }
+
+    setMoviesFiltered(moviesFiltered)
     setShowPreloader(false);
     saveResultToLocalStorage(shortMoviesChecked, searchQuery, moviesFiltered);
     setMessage(moviesFiltered);

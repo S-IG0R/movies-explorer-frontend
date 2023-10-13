@@ -7,6 +7,7 @@ export function SwitchButton({
   name,
   setShortMoviesChecked,
   searchParams,
+  handleSubmit,
 }) {
   const { values, handleChange, setValues } = useForm({
     shortMovies: {
@@ -15,9 +16,14 @@ export function SwitchButton({
     },
   });
 
+  const onChangeCheckbox = (evt) => {
+    handleChange(evt);
+    handleSubmit(evt);
+  };
+
   useEffect(() => {
     setShortMoviesChecked(values.shortMovies.isChecked);
-  }, [handleChange]);
+  }, [onChangeCheckbox]);
 
   useEffect(() => {
     setValues({
@@ -34,7 +40,7 @@ export function SwitchButton({
         id="switch"
         type="checkbox"
         name={name}
-        onChange={handleChange}
+        onChange={onChangeCheckbox}
         checked={values.shortMovies.isChecked}
       />
       <label className="switch-label" htmlFor="switch">

@@ -69,6 +69,7 @@ export function SearchForm({
           name="shortMovies"
           setShortMoviesChecked={setShortMoviesChecked}
           searchParams={searchParams}
+          handleSubmit={handleSubmit}
         />
         <div className="search-section__line" />
       </form>
