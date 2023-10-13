@@ -7,6 +7,7 @@ import {
   NAME_REGEX,
   NAME_HINT,
   EMAIL_HINT,
+  RESPONSE_CODES
 } from '../../utils/constants';
 
 export function Profile({
@@ -54,16 +55,16 @@ export function Profile({
   };
 
   useEffect(() => {
-    if (profileMessage === 409) {
+    if (profileMessage === RESPONSE_CODES.CONFLICT) {
       setErrorMessage('Пользователь с таким email уже существует');
     }
-    if (profileMessage === 400) {
+    if (profileMessage === RESPONSE_CODES.BAD_REQUEST) {
       setErrorMessage('При обновлении профиля произошла ошибка.');
     }
-    if (profileMessage === 500) {
+    if (profileMessage === RESPONSE_CODES.SERVER_ERROR) {
       setErrorMessage('500 На сервере произошла ошибка.');
     }
-    if (profileMessage === 404) {
+    if (profileMessage === RESPONSE_CODES.NOT_FOUND) {
       setErrorMessage('404 Страница по указанному маршруту не найдена.');
     }
     if (!profileMessage) {

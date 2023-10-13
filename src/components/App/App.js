@@ -16,7 +16,15 @@ import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 import { InfoTooltip } from '../InfoTooltip/InfoTooltip';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { ROUTES } from '../../utils/constants';
+import {
+  ROUTES,
+  SHORT_FILM_DURATION,
+  CARDS_NUM_TO_ADD,
+  DISPLAY_WIDTH,
+  CARDS_TO_RENDER,
+  RESPONSE_CODES,
+  INFO_MESSAGE
+} from '../../utils/constants';
 
 import { getAllMovies } from '../../utils/MoviesApi';
 import {
@@ -103,9 +111,9 @@ function App() {
   useEffect(() => {
     if (
       loggedIn &&
-      (location === ROUTES.register || location === ROUTES.login)
+      (location === ROUTES.REGISTER || location === ROUTES.LOGIN)
     ) {
-      navigate(ROUTES.main, { replace: true });
+      navigate(ROUTES.MAIN, { replace: true });
     }
   }, [loggedIn, location]);
 
@@ -133,7 +141,7 @@ function App() {
       .then((res) => {
         if (res.token) {
           setLoggedIn(true);
-          navigate(ROUTES.movies, { replace: true });
+          navigate(ROUTES.MOVIES, { replace: true });
           if (localStorage.getItem('jwt') !== res.token) {
             localStorage.setItem('jwt', res.token);
           }
@@ -178,7 +186,7 @@ function App() {
     setDisableInput(false);
     setTooltipMessage(`До скорой встречи ${currentUser?.name}!`);
     setCurrentUser(null);
-    navigate(ROUTES.main, { replace: true });
+    navigate(ROUTES.MAIN, { replace: true });
   };
 
   const handleUpdateProfile = (name, email) => {
@@ -190,7 +198,7 @@ function App() {
         setTooltipMessage('Данные успешно обновлены');
       })
       .catch((err) => {
-        if (err.status === 401) {
+        if (err.status === RESPONSE_CODES.UNAUTHORIZED) {
           setTooltipMessage(`Проблема авторизации. Статус ${err.status}`);
         } else {
           setProfileMessage(err.status);
@@ -207,7 +215,7 @@ function App() {
         setSavedMovies([movie, ...savedMovies]);
       })
       .catch((err) => {
-        if (err.status === 401) {
+        if (err.status === RESPONSE_CODES.UNAUTHORIZED) {
           setTooltipMessage(`Проблема авторизации ${err.status}`);
         }
       });
@@ -228,7 +236,7 @@ function App() {
           );
         })
         .catch((err) => {
-          if (err.status === 401) {
+          if (err.status === RESPONSE_CODES.UNAUTHORIZED) {
             setTooltipMessage(`Проблема авторизации ${err.status}`);
           }
         });
@@ -243,7 +251,7 @@ function App() {
           );
         })
         .catch((err) => {
-          if (err.status === 401) {
+          if (err.status === RESPONSE_CODES.UNAUTHORIZED) {
             setTooltipMessage(`Проблема авторизации ${err.status}`);
           }
         });
@@ -255,7 +263,7 @@ function App() {
   // если поиск ничего не нашел, покажем надпись об этом
   const setMessage = (movies) => {
     if (movies.length === 0) {
-      setInfoMessage('Ничего не найдено');
+      setInfoMessage(INFO_MESSAGE.NOTHING_FOUND);
     } else {
       setInfoMessage('');
     }
@@ -275,9 +283,7 @@ function App() {
         })
         .catch((err) => {
           if (err) {
-            setInfoMessage(
-              'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз найдено'
-            );
+            setInfoMessage(INFO_MESSAGE.SERVER_ERROR);
           }
         })
         .finally(() => {
@@ -308,7 +314,7 @@ function App() {
       return shortFilmsSelected === true
         ? (nameEnLowerCase.includes(queryLowerCase) ||
             nameRuLowerCase.includes(queryLowerCase)) &&
-            film.duration <= 40
+            film.duration <= SHORT_FILM_DURATION
         : nameEnLowerCase.includes(queryLowerCase) ||
             nameRuLowerCase.includes(queryLowerCase);
     });
@@ -327,7 +333,7 @@ function App() {
       (searchQuerySavedMov || shortMoviesSavedMov) &&
       moviesFiltered.length === 0
     ) {
-      setInfoMessageSavedMov('Ничего не найдено');
+      setInfoMessageSavedMov(INFO_MESSAGE.NOTHING_FOUND);
     } else {
       setInfoMessageSavedMov('');
     }
@@ -408,11 +414,12 @@ function App() {
     const renderMovies = (cardsNumber) => {
       // определим сколько карточек загружать
       const numMoviesDependsToWidth =
-        windowSize >= 1200
-          ? 12
-          : windowSize <= 1199 && windowSize >= 768
-          ? 8
-          : 5;
+        windowSize >= DISPLAY_WIDTH.WIDTH_1200
+          ? CARDS_TO_RENDER.WIDTH_1200
+          : windowSize >= DISPLAY_WIDTH.WIDTH_768 &&
+            windowSize <= DISPLAY_WIDTH.WIDTH_1199
+          ? CARDS_TO_RENDER.WIDTH_768PX
+          : CARDS_TO_RENDER.WIDTH_480PX;
 
       // вырезаем необходимый по размеру кусок массива
       // добавим в него поле isMovieSaved. Если в сохраненных фильмах и
@@ -453,12 +460,15 @@ function App() {
 
   // добавляем карточки по клику на кнопку*
   const loadMoreCards = () => {
-    if (windowSize >= 1200) {
-      setNumberCardToAdd(numberCardToAdd + 3);
-    } else if (windowSize >= 768 && windowSize <= 1199) {
-      setNumberCardToAdd(numberCardToAdd + 2);
+    if (windowSize >= DISPLAY_WIDTH.WIDTH_1200) {
+      setNumberCardToAdd(numberCardToAdd + CARDS_NUM_TO_ADD.WIDTH_1200);
+    } else if (
+      windowSize >= DISPLAY_WIDTH.WIDTH_768 &&
+      windowSize <= DISPLAY_WIDTH.WIDTH_1199
+    ) {
+      setNumberCardToAdd(numberCardToAdd + CARDS_NUM_TO_ADD.WIDTH_768PX);
     } else {
-      setNumberCardToAdd(numberCardToAdd + 1);
+      setNumberCardToAdd(numberCardToAdd + CARDS_NUM_TO_ADD.WIDTH_480PX);
     }
     // // узнаем с какого элемента начать копирование
     // const startCopy = moviesToRender.length;
@@ -493,15 +503,15 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         {/* отображаем хедер в случае следующих путей */}
-        {(location === ROUTES.main ||
-          location === ROUTES.savedMovies ||
-          location === ROUTES.movies ||
-          location === ROUTES.profile) && <Header loggedIn={loggedIn} />}
+        {(location === ROUTES.MAIN ||
+          location === ROUTES.SAVED_MOVIES ||
+          location === ROUTES.MOVIES ||
+          location === ROUTES.PROFILE) && <Header loggedIn={loggedIn} />}
         <main className="content">
           <Routes>
-            <Route path={ROUTES.main} element={<Main />} />
+            <Route path={ROUTES.MAIN} element={<Main />} />
             <Route
-              path={ROUTES.movies}
+              path={ROUTES.MOVIES}
               element={
                 <ProtectedRoute loggedIn={loggedIn}>
                   <Movies
@@ -521,7 +531,7 @@ function App() {
               }
             />
             <Route
-              path={ROUTES.savedMovies}
+              path={ROUTES.SAVED_MOVIES}
               element={
                 <ProtectedRoute loggedIn={loggedIn}>
                   <SavedMovies
@@ -538,7 +548,7 @@ function App() {
               }
             />
             <Route
-              path={ROUTES.profile}
+              path={ROUTES.PROFILE}
               element={
                 <ProtectedRoute loggedIn={loggedIn}>
                   <Profile
@@ -552,7 +562,7 @@ function App() {
               }
             />
             <Route
-              path={ROUTES.register}
+              path={ROUTES.REGISTER}
               element={
                 <Register
                   handleRegistration={handleRegistration}
@@ -563,7 +573,7 @@ function App() {
               }
             />
             <Route
-              path={ROUTES.login}
+              path={ROUTES.LOGIN}
               element={
                 <Login
                   handleLogin={handleLogin}
@@ -573,7 +583,7 @@ function App() {
                 />
               }
             />
-            <Route path={ROUTES.notFound} element={<PageNotFound />} />
+            <Route path={ROUTES.NOT_FOUND} element={<PageNotFound />} />
           </Routes>
           {tooltipMessage && (
             <InfoTooltip
@@ -583,9 +593,9 @@ function App() {
           )}
         </main>
         {/* отображаем футер в случае следующих путей */}
-        {(location === ROUTES.main ||
-          location === ROUTES.movies ||
-          location === ROUTES.savedMovies) && <Footer />}
+        {(location === ROUTES.MAIN ||
+          location === ROUTES.MOVIES ||
+          location === ROUTES.SAVED_MOVIES) && <Footer />}
       </div>
     </CurrentUserContext.Provider>
   );

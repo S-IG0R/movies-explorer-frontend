@@ -37,7 +37,7 @@ export function BurgerMenu({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
                   : 'burger-menu__link'
               }`
             }
-            to={ROUTES.main}
+            to={ROUTES.MAIN}
           >
             Главная
           </NavLink>
@@ -52,7 +52,7 @@ export function BurgerMenu({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
                   : 'burger-menu__link'
               }`
             }
-            to={ROUTES.movies}
+            to={ROUTES.MOVIES}
           >
             Фильмы
           </NavLink>
@@ -67,7 +67,7 @@ export function BurgerMenu({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
                   : 'burger-menu__link'
               }`
             }
-            to={ROUTES.savedMovies}
+            to={ROUTES.SAVED_MOVIES}
           >
             Сохранённые фильмы
           </NavLink>
@@ -76,7 +76,7 @@ export function BurgerMenu({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
           <Link
             onClick={handleClickClose}
             className="burger-menu__profile-button"
-            to={ROUTES.profile}
+            to={ROUTES.PROFILE}
           >
             Аккаунт
           </Link>

@@ -5,7 +5,7 @@ import { ROUTES } from '../../utils/constants';
 
 export function Logo() {
   return (
-    <Link to={ROUTES.main}>
+    <Link to={ROUTES.MAIN}>
       <img className="logo" alt="Логотип" src={logo} />
     </Link>
   );

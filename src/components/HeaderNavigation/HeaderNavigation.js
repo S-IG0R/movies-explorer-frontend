@@ -7,7 +7,7 @@ export function HeaderNavigation() {
     <ul className="navigation-bar">
       <li className="navigation-bar__list-item">
         <NavLink
-          to={ROUTES.movies}
+          to={ROUTES.MOVIES}
           className={({ isActive }) =>
             `${
               isActive
@@ -21,7 +21,7 @@ export function HeaderNavigation() {
       </li>
       <li className="navigation-bar__list-item">
         <NavLink
-          to={ROUTES.savedMovies}
+          to={ROUTES.SAVED_MOVIES}
           className={({ isActive }) =>
             `${
               isActive

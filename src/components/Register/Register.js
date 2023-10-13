@@ -4,7 +4,7 @@ import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { PageWithForm } from '../PageWithForm/PageWithForm';
 import { useForm } from '../../hooks/useForm';
 
-import { ROUTES, EMAIL_REGEX, NAME_REGEX } from '../../utils/constants';
+import { ROUTES, EMAIL_REGEX, NAME_REGEX, RESPONSE_CODES } from '../../utils/constants';
 import { useEffect, useState } from 'react';
 
 export function Register({
@@ -46,16 +46,16 @@ export function Register({
   }, [values]);
 
   useEffect(() => {
-    if (registrationMessage === 409) {
+    if (registrationMessage === RESPONSE_CODES.CONFLICT) {
       setErrorMessage('Пользователь с таким email уже существует');
     }
-    if (registrationMessage === 400) {
+    if (registrationMessage === RESPONSE_CODES.BAD_REQUEST) {
       setErrorMessage('При регистрации пользователя произошла ошибка');
     }
-    if (registrationMessage === 500) {
+    if (registrationMessage === RESPONSE_CODES.SERVER_ERROR) {
       setErrorMessage('500 На сервере произошла ошибка');
     }
-    if (registrationMessage === 404) {
+    if (registrationMessage === RESPONSE_CODES.NOT_FOUND) {
       setErrorMessage('404 Страница по указанному маршруту не найдена');
     }
     if (!registrationMessage) {
@@ -68,7 +68,7 @@ export function Register({
       title="Добро пожаловать!"
       formName="register-form"
       underButtonText="Уже зарегистрированы?"
-      link={ROUTES.login}
+      link={ROUTES.LOGIN}
       linkName="Войти"
       onSubmit={onSubmit}
     >

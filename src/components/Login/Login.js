@@ -4,7 +4,7 @@ import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { PageWithForm } from '../PageWithForm/PageWithForm';
 import { useForm } from '../../hooks/useForm';
 
-import { ROUTES, EMAIL_REGEX } from '../../utils/constants';
+import { ROUTES, EMAIL_REGEX, RESPONSE_CODES } from '../../utils/constants';
 import { useEffect, useState } from 'react';
 
 export function Login({
@@ -38,16 +38,16 @@ export function Login({
   };
 
   useEffect(() => {
-    if (loginMessage === 401) {
+    if (loginMessage === RESPONSE_CODES.UNAUTHORIZED) {
       setErrorMessage('Вы ввели неправильный логин или пароль.');
     }
-    if (loginMessage === 400) {
+    if (loginMessage === RESPONSE_CODES.BAD_REQUEST) {
       setErrorMessage('Переданы некорректные данные');
     }
-    if (loginMessage === 500) {
+    if (loginMessage === RESPONSE_CODES.SERVER_ERROR) {
       setErrorMessage('500 На сервере произошла ошибка');
     }
-    if (loginMessage === 404) {
+    if (loginMessage === RESPONSE_CODES.NOT_FOUND) {
       setErrorMessage('404 Страница по указанному маршруту не найдена');
     }
     if (!loginMessage) setErrorMessage('');
@@ -58,7 +58,7 @@ export function Login({
       title="Рады видеть!"
       formName="login-form"
       underButtonText="Ещё не зарегистрированы?"
-      link={ROUTES.register}
+      link={ROUTES.REGISTER}
       linkName="Регистрация"
       onSubmit={onSubmit}
     >

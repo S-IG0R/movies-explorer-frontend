@@ -17,12 +17,12 @@ export function Header({ loggedIn }) {
         <nav className="header__menu">
           <ul className='header__menu-list'>
             <li className="header__menu-item">
-              <Link to={ROUTES.register} className="header__register-link">
+              <Link to={ROUTES.REGISTER} className="header__register-link">
                 Регистрация
               </Link>
             </li>
             <li className="header__menu-item">
-              <Link to={ROUTES.login} className="header__login-button">
+              <Link to={ROUTES.LOGIN} className="header__login-button">
                 Войти
               </Link>
             </li>

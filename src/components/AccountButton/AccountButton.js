@@ -4,7 +4,7 @@ import { ROUTES } from '../../utils/constants';
 
 export function AccountButton() {
   return (
-    <Link to={ROUTES.profile} className="account-button">
+    <Link to={ROUTES.PROFILE} className="account-button">
       Аккаунт
     </Link>
   );
