@@ -1,7 +1,7 @@
 import './App.css';
 
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
 import { Header } from '../Header/Header';
 import { Main } from '../Main/Main';
@@ -250,20 +250,6 @@ function App() {
 
   // ============================================================ //
 
-  // загружаем данные с локального хранилища при перезагрузке страницы
-  useEffect(() => {
-    const json = localStorage.getItem('searchParams');
-    if (json) {
-      const searchParams = JSON.parse(json);
-      setMoviesFiltered(searchParams.movies);
-      setMessage(searchParams.movies);
-      setSearchParams({
-        shortMovies: searchParams.shortMovies,
-        query: searchParams.searchQuery,
-      });
-    }
-  }, []);
-
   // если поиск ничего не нашел, покажем надпись об этом
   const setMessage = (movies) => {
     if (movies.length === 0) {
@@ -271,17 +257,6 @@ function App() {
     } else {
       setInfoMessage('');
     }
-  };
-
-  // сохраним результат если он не пустой в локальное хранилище
-  const saveResultToLocalStorage = (isShortMovies, searchQuery, movies) => {
-    const shortMovies = String(isShortMovies);
-    const data = JSON.stringify({
-      shortMovies,
-      searchQuery,
-      movies,
-    });
-    localStorage.setItem('searchParams', data);
   };
 
   // самбит поиска по всем фильмам
@@ -313,12 +288,15 @@ function App() {
     }
   };
 
+
   // сабмит поиска по сохр. фильмам
   const handleSubmitSearchSavedMovies = (searchQuery) => {
     setSearchQuerySavedMov(searchQuery);
     setShowPreloader(true);
   };
 
+
+  // унифицированная функция фильтрации фильмов
   const filterMovies = (allMovies, searchQuery, shortFilmsSelected) => {
     // переведем поисковую фразу в нижний регистр
     const queryLowerCase = searchQuery.toLowerCase();
@@ -357,8 +335,34 @@ function App() {
     setRenderSaveMov(moviesFiltered);
   }, [searchQuerySavedMov, shortMoviesSavedMov, savedMovies, showPreloader]);
 
-  // фильтрация начальных карточек
+
+  // загружаем данные с локального хранилища при перезагрузке страницы
   useEffect(() => {
+    // const json = localStorage.getItem('searchParams');
+    // if (json) {
+    //   const searchParams = JSON.parse(json);
+    //   setMoviesFiltered(searchParams.movies);
+    //   setMessage(searchParams.movies);
+    //   setSearchParams({
+    //     shortMovies: searchParams.shortMovies,
+    //     query: searchParams.searchQuery,
+    //   });
+    // }
+    if (localStorage.getItem('foundMovies')) {
+      const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
+      setMoviesFiltered(foundMovies)
+    }
+  }, []);
+
+ // сохраним результат в локальное хранилище
+ const saveResultToLocalStorage = (isShortMovies, searchQuery, movies) => {
+  localStorage.setItem('searchQuery', searchQuery);
+  localStorage.setItem('shortMovies', String(isShortMovies));
+  localStorage.setItem('foundMovies', JSON.stringify(movies));
+};
+
+  // фильтрация начальных карточек
+  useMemo(() => {
     // if (initialMovies.length === 0 && !searchQuery) return;
     if (!searchQuery) return;
     const moviesFiltered = filterMovies(
@@ -381,7 +385,7 @@ function App() {
 
   // узнаем ширину окна
   useEffect(() => {
-    if (moviesFiltered.length === 0) return;
+    // if (moviesFiltered.length === 0) return;
 
     setWindowSize(window.innerWidth);
 
@@ -398,7 +402,7 @@ function App() {
     return () => {
       window.removeEventListener('resize', handleChangeWidth);
     };
-  }, [moviesFiltered]);
+  }, []);
 
   // после определения ширины окна узнаем сколько карточек нужно рендерить
   useEffect(() => {

@@ -4,6 +4,7 @@ import { Preloader } from '../Preloader/Preloader';
 import { MoviesCardList } from '../MoviesCardList/MoviesCardList';
 import { MoviesCard } from '../MoviesCard/MoviesCard';
 import { InfoMessage } from '../InfoMessage/InfoMessage';
+import { useEffect, useState } from 'react';
 
 export function Movies({
   moviesToRender,
@@ -12,24 +13,38 @@ export function Movies({
   showButtonMore,
   infoMessage,
   handleSubmitSearchForm,
-  searchParams,
+  // searchParams,
   handleSaveMovie,
   handleDeleteMovie,
   setShortMoviesChecked,
   disableInput,
 }) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [shortMoviesCheckbox, setShortMoviesCheckbox] = useState('');
+
   const handleClick = () => {
     loadMoreCards();
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('searchQuery')) {
+      setSearchQuery(localStorage.getItem('searchQuery'));
+    }
+    if (localStorage.getItem('shortMovies')) {
+      setShortMoviesCheckbox(localStorage.getItem('shortMovies'));
+    }
+  }, []);
+
   return (
     <section className="movies">
       <SearchForm
         name="search-movies"
         handleSubmitSearchForm={handleSubmitSearchForm}
-        searchParams={searchParams}
+        // searchParams={searchParams}
         setShortMoviesChecked={setShortMoviesChecked}
         disableInput={disableInput}
-
+        searchQuery={searchQuery}
+        shortMoviesCheckbox={shortMoviesCheckbox}
       />
       {showPreloader && <Preloader />}
       {moviesToRender.length === 0 || showPreloader ? (

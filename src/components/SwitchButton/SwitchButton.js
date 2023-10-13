@@ -6,8 +6,9 @@ export function SwitchButton({
   title,
   name,
   setShortMoviesChecked,
-  searchParams,
+  // searchParams,
   handleSubmit,
+  shortMoviesCheckbox
 }) {
   const { values, handleChange, setValues } = useForm({
     shortMovies: {
@@ -28,10 +29,10 @@ export function SwitchButton({
   useEffect(() => {
     setValues({
       shortMovies: {
-        isChecked: searchParams.shortMovies === 'true' ? true : false,
+        isChecked: shortMoviesCheckbox === 'true' ? true : false,
       },
     });
-  }, []);
+  }, [shortMoviesCheckbox]);
 
   return (
     <>

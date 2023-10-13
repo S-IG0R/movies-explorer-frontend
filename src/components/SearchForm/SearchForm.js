@@ -9,6 +9,8 @@ export function SearchForm({
   searchParams,
   setShortMoviesChecked,
   disableInput,
+  searchQuery,
+  shortMoviesCheckbox
 }) {
   const [isInputValid, setIsInputValid] = useState(false);
   const { values, handleChange, setValues } = useForm({
@@ -22,11 +24,12 @@ export function SearchForm({
   useEffect(() => {
     setValues({
       search: {
-        value: searchParams.query ?? values.search.value,
+        value: searchQuery ?? values.search.value,
       },
     });
-  }, [searchParams]);
+  }, [searchQuery]);
 
+  
   // обработчик поиска
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -68,7 +71,7 @@ export function SearchForm({
           title="Короткометражки"
           name="shortMovies"
           setShortMoviesChecked={setShortMoviesChecked}
-          searchParams={searchParams}
+          shortMoviesCheckbox={shortMoviesCheckbox}
           handleSubmit={handleSubmit}
         />
         <div className="search-section__line" />
