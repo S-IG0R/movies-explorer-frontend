@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 export function SearchForm({
   name,
   handleSubmitSearchForm,
-  searchParams,
   setShortMoviesChecked,
   disableInput,
   searchQuery,
@@ -29,7 +28,7 @@ export function SearchForm({
     });
   }, [searchQuery]);
 
-  
+
   // обработчик поиска
   const handleSubmit = (evt) => {
     evt.preventDefault();

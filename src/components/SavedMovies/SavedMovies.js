@@ -25,7 +25,6 @@ export function SavedMovies({
         setSearchQuery={setSearchQuery}
         setShortMoviesChecked={setShortMoviesChecked}
         handleSubmitSearchForm={handleSubmitSearchForm}
-        searchParams={{}}
         disableInput={disableInput}
       />
       {showPreloader && <Preloader />}

@@ -34,6 +34,7 @@ export const DISPLAY_WIDTH = {
   WIDTH_1200: 1200,
   WIDTH_1199: 1199,
   WIDTH_768: 768,
+  WIDTH_767: 767,
 };
 
 export const CARDS_TO_RENDER = {

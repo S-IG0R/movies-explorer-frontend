@@ -23,7 +23,7 @@ import {
   DISPLAY_WIDTH,
   CARDS_TO_RENDER,
   RESPONSE_CODES,
-  INFO_MESSAGE
+  INFO_MESSAGE,
 } from '../../utils/constants';
 
 import { getAllMovies } from '../../utils/MoviesApi';
@@ -49,6 +49,7 @@ function App() {
   const [moviesFiltered, setMoviesFiltered] = useState([]);
   const [initialMovies, setInitialMovies] = useState([]);
   const [numberCardToAdd, setNumberCardToAdd] = useState(0);
+  const [numberCardToRender, setNumberCardToRender] = useState(0);
   const [moviesToRender, setMoviesToRender] = useState([]);
   const [showPreloader, setShowPreloader] = useState(false);
   const [showButtonMore, setShowButtonMore] = useState(null);
@@ -343,16 +344,6 @@ function App() {
 
   // загружаем данные с локального хранилища при перезагрузке страницы
   useEffect(() => {
-    // const json = localStorage.getItem('searchParams');
-    // if (json) {
-    //   const searchParams = JSON.parse(json);
-    //   setMoviesFiltered(searchParams.movies);
-    //   setMessage(searchParams.movies);
-    //   setSearchParams({
-    //     shortMovies: searchParams.shortMovies,
-    //     query: searchParams.searchQuery,
-    //   });
-    // }
     if (localStorage.getItem('foundMovies')) {
       const foundMovies = JSON.parse(localStorage.getItem('foundMovies'));
       setMoviesFiltered(foundMovies);
@@ -368,20 +359,12 @@ function App() {
 
   // фильтрация начальных карточек
   useMemo(() => {
-    // if (initialMovies.length === 0 && !searchQuery) return;
     if (!searchQuery) return;
     const moviesFiltered = filterMovies(
       initialMovies,
       searchQuery,
       shortMoviesChecked
     );
-    // если фильмы нашлись сохраним их и положим в стейт
-    // if (moviesFiltered.length !== 0) {
-    //   setMoviesFiltered(moviesFiltered);
-    // } else {
-    //   setMoviesFiltered([]);
-    // }
-
     setMoviesFiltered(moviesFiltered);
     setShowPreloader(false);
     saveResultToLocalStorage(shortMoviesChecked, searchQuery, moviesFiltered);
@@ -409,90 +392,62 @@ function App() {
     };
   }, []);
 
+  // определим сколько карточек загружать
+  useEffect(() => {
+    // сбросим количество добавления карточек
+    setNumberCardToAdd(0);
+    if (windowSize >= DISPLAY_WIDTH.WIDTH_1200) {
+      setNumberCardToRender(CARDS_TO_RENDER.WIDTH_1200);
+    } else if (
+      windowSize >= DISPLAY_WIDTH.WIDTH_768 &&
+      windowSize <= DISPLAY_WIDTH.WIDTH_1199
+    ) {
+      setNumberCardToRender(CARDS_TO_RENDER.WIDTH_768PX);
+    } else {
+      setNumberCardToRender(CARDS_TO_RENDER.WIDTH_480PX);
+    }
+  }, [windowSize]);
+
   // после определения ширины окна узнаем сколько карточек нужно рендерить
   useEffect(() => {
-    const renderMovies = (cardsNumber) => {
-      // определим сколько карточек загружать
-      const numMoviesDependsToWidth =
-        windowSize >= DISPLAY_WIDTH.WIDTH_1200
-          ? CARDS_TO_RENDER.WIDTH_1200
-          : windowSize >= DISPLAY_WIDTH.WIDTH_768 &&
-            windowSize <= DISPLAY_WIDTH.WIDTH_1199
-          ? CARDS_TO_RENDER.WIDTH_768PX
-          : CARDS_TO_RENDER.WIDTH_480PX;
+    // вырезаем необходимый по размеру кусок массива
+    // добавим в него поле isMovieSaved. Если в сохраненных фильмах и
+    // в текущем фильме id совпали значит он сохранен
 
-      // вырезаем необходимый по размеру кусок массива
-      // добавим в него поле isMovieSaved. Если в сохраненных фильмах и
-      // в текущем фильме id совпали значит он сохранен
-      const moviesToRender = moviesFiltered
-        .slice(0, numMoviesDependsToWidth + numberCardToAdd)
-        .map((movie) => ({
-          ...movie,
-          isMovieSaved: savedMovies.some((currentMovie) => {
-            return currentMovie.movieId === movie.id;
-          }),
-        }));
+    const moviesToRender = moviesFiltered
+      .slice(0, numberCardToRender + numberCardToAdd)
+      .map((movie) => ({
+        ...movie,
+        isMovieSaved: savedMovies.some((mov) => {
+          return mov.movieId === movie.id;
+        }),
+      }));
 
-      /* если карточек в отфильтрованном массиве больше чем,
-        в скопированном куске, значит покажем кнопку "добавить еще"*/
-      moviesFiltered.length > moviesToRender.length
-        ? setShowButtonMore(true)
-        : setShowButtonMore(false);
+    /* если карточек в отфильтрованном массиве больше чем,
+    в скопированном куске, значит покажем кнопку "добавить еще"*/
+    moviesFiltered.length > moviesToRender.length
+      ? setShowButtonMore(true)
+      : setShowButtonMore(false);
 
-      // отправляем новый массив на рендеринг
-      setMoviesToRender(moviesToRender);
-    };
+    setMoviesToRender(moviesToRender);
 
-    renderMovies();
-    /* в зависимости от ширины экрана устанавливаем количество
-    карточек для рендеринга и количество добавляемое кнопкой*/
-    // if (windowSize >= 1200) {
-    //   setNumberCardToAdd(3);
-    //   renderMovies(12);
-    // } else if (windowSize >= 768 && windowSize <= 1199) {
-    //   setNumberCardToAdd(2);
-    //   renderMovies(8);
-    // } else {
-    //   setNumberCardToAdd(1);
-    //   renderMovies(5);
-    // }
-  }, [windowSize, moviesFiltered, numberCardToAdd, savedMovies]);
+    // отправляем новый массив на рендеринг
+  }, [moviesFiltered, numberCardToAdd, savedMovies, numberCardToRender]);
 
   // добавляем карточки по клику на кнопку*
   const loadMoreCards = () => {
     if (windowSize >= DISPLAY_WIDTH.WIDTH_1200) {
       setNumberCardToAdd(numberCardToAdd + CARDS_NUM_TO_ADD.WIDTH_1200);
-    } else if (
+    }
+    if (
       windowSize >= DISPLAY_WIDTH.WIDTH_768 &&
       windowSize <= DISPLAY_WIDTH.WIDTH_1199
     ) {
       setNumberCardToAdd(numberCardToAdd + CARDS_NUM_TO_ADD.WIDTH_768PX);
-    } else {
+    }
+    if (windowSize < DISPLAY_WIDTH.WIDTH_767) {
       setNumberCardToAdd(numberCardToAdd + CARDS_NUM_TO_ADD.WIDTH_480PX);
     }
-    // // узнаем с какого элемента начать копирование
-    // const startCopy = moviesToRender.length;
-    // // узнаем сколько элементов нужно скопировать
-    // const endCopy = startCopy + (windowSize >= 1200 ? 3 : windowSize <= 1199 && windowSize >= 768 ? 2 : 1);
-    // // копируем элементы из отфильтрованного массива
-    // const moviesAdded = moviesFiltered.slice(startCopy, endCopy);
-    // // добавляем лайк и проверяем сохранен ли фильм
-    // const checkSaved = moviesAdded.map((movie) => ({
-    //   ...movie,
-    //   isMovieSaved: savedMovies.some((currentMovie) => {
-    //     return currentMovie.movieId === movie.id;
-    //   }),
-    // }));
-    // // объединяем с теми что были ранее и передаем в ренедеринг
-    // const newMoviesList = moviesToRender.concat(checkSaved);
-
-    // // отправляем на рендеринг
-    // setMoviesToRender(newMoviesList);
-    /* если длина массива отфильтрованных фильмов по запросу
-     равна длине массива добавляемых карточек убираем кнопку добавить */
-    // if (moviesFiltered.length === newMoviesList.length) {
-    //   setShowButtonMore(false);
-    // }
   };
 
   if (!isAppInited) {
