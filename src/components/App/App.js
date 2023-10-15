@@ -112,11 +112,11 @@ function App() {
   }, [loggedIn]);
 
 
+  // редирект со стр. регистрации и логина если пользователь залогинился
   useEffect(() => {
-    if (
-      loggedIn &&
-      (location === ROUTES.REGISTER || location === ROUTES.LOGIN)
-    ) {
+    if (loggedIn &&
+       (location === ROUTES.REGISTER || location === ROUTES.LOGIN))
+    {
       navigate(ROUTES.MAIN, { replace: true });
     }
   }, [loggedIn, location]);
@@ -305,6 +305,7 @@ function App() {
           setDisableInput(false);
         });
     } else {
+      setShowPreloader(true);
       setInitialMovies(JSON.parse(moviesFromLocalStorage));
     }
   };
@@ -327,10 +328,10 @@ function App() {
       // если найдется ключевая фраза то вернем новый массив
       return shortFilmsSelected === true
         ? (nameEnLowerCase.includes(queryLowerCase) ||
-            nameRuLowerCase.includes(queryLowerCase)) &&
-            film.duration <= SHORT_FILM_DURATION
+           nameRuLowerCase.includes(queryLowerCase)) &&
+           film.duration <= SHORT_FILM_DURATION
         : nameEnLowerCase.includes(queryLowerCase) ||
-            nameRuLowerCase.includes(queryLowerCase);
+          nameRuLowerCase.includes(queryLowerCase);
     });
     return filtered;
   };
@@ -339,6 +340,7 @@ function App() {
   // фильтрация сохраненных фильмов
   useMemo(() => {
     if(searchQuerySavedMov) {
+    setDisableInput(true);
     setShowPreloader(true);
     const moviesFiltered = filterMovies(
       savedMovies,
@@ -354,6 +356,7 @@ function App() {
     } else {
       setInfoMessageSavedMov('');
     }
+    setDisableInput(false);
     setShowPreloader(false);
     setRenderSaveMov(moviesFiltered);
     }
@@ -380,8 +383,9 @@ function App() {
 
   // фильтрация начальных карточек
   useMemo(() => {
+    setShowPreloader(false);
     if (searchQuery && initialMovies.length > 0) {
-    setShowPreloader(true);
+    setDisableInput(true);
     setWindowSize(window.innerWidth);
 
     const moviesFiltered = filterMovies(
@@ -389,7 +393,7 @@ function App() {
       searchQuery,
       shortMoviesChecked
     );
-
+    setDisableInput(false);
     setShowPreloader(false);
     setMoviesFiltered(moviesFiltered);
     saveResultToLocalStorage(shortMoviesChecked, searchQuery, moviesFiltered);
