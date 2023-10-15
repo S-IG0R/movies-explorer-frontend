@@ -13,7 +13,6 @@ export function Movies({
   showButtonMore,
   infoMessage,
   handleSubmitSearchForm,
-  // searchParams,
   handleSaveMovie,
   handleDeleteMovie,
   setShortMoviesChecked,
@@ -40,7 +39,6 @@ export function Movies({
       <SearchForm
         name="search-movies"
         handleSubmitSearchForm={handleSubmitSearchForm}
-        // searchParams={searchParams}
         setShortMoviesChecked={setShortMoviesChecked}
         disableInput={disableInput}
         searchQuery={searchQuery}

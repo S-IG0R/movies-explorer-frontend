@@ -81,9 +81,11 @@ function App() {
     setAppIsInited(true);
   }, []);
 
+
   useEffect(() => {
     initUser();
   }, [initUser]);
+
 
   useEffect(() => {
     if (!loggedIn) return;
@@ -109,6 +111,7 @@ function App() {
     }
   }, [loggedIn]);
 
+
   useEffect(() => {
     if (
       loggedIn &&
@@ -117,6 +120,7 @@ function App() {
       navigate(ROUTES.MAIN, { replace: true });
     }
   }, [loggedIn, location]);
+
 
   const handleRegistration = (name, email, password) => {
     setDisableInput(true);
@@ -135,6 +139,7 @@ function App() {
         setDisableInput(false);
       });
   };
+
 
   const handleLogin = (email, password) => {
     setDisableInput(true);
@@ -156,6 +161,7 @@ function App() {
         setDisableInput(false);
       });
   };
+
 
   const handleLogout = () => {
     localStorage.removeItem('jwt');
@@ -191,6 +197,7 @@ function App() {
     navigate(ROUTES.MAIN, { replace: true });
   };
 
+
   const handleUpdateProfile = (name, email) => {
     setDisableInput(true);
     updateProfile(name, email)
@@ -211,6 +218,7 @@ function App() {
       });
   };
 
+
   const handleSaveMovie = (movie) => {
     addMovieToSave(movie)
       .then((movie) => {
@@ -222,6 +230,7 @@ function App() {
         }
       });
   };
+
 
   const handleDeleteMovie = (movie) => {
     // если карточка пришла из movies
@@ -260,7 +269,9 @@ function App() {
     }
   };
 
-  // ============================================================ //
+
+  // ============================= ЛОГИКА ФИЛЬТРАЦИИ ================================ //
+
 
   // если поиск ничего не нашел, покажем надпись об этом
   const setMessage = (movies) => {
@@ -270,6 +281,7 @@ function App() {
       setInfoMessage('');
     }
   };
+
 
   // самбит поиска по всем фильмам
   const handleSubmitSearchForm = (searchQuery) => {
@@ -293,16 +305,16 @@ function App() {
           setDisableInput(false);
         });
     } else {
-      setShowPreloader(true);
       setInitialMovies(JSON.parse(moviesFromLocalStorage));
     }
   };
 
+
   // сабмит поиска по сохр. фильмам
   const handleSubmitSearchSavedMovies = (searchQuery) => {
     setSearchQuerySavedMov(searchQuery);
-    setShowPreloader(true);
   };
+
 
   // унифицированная функция фильтрации фильмов
   const filterMovies = (allMovies, searchQuery, shortFilmsSelected) => {
@@ -323,8 +335,11 @@ function App() {
     return filtered;
   };
 
+
   // фильтрация сохраненных фильмов
-  useEffect(() => {
+  useMemo(() => {
+    if(searchQuerySavedMov) {
+    setShowPreloader(true);
     const moviesFiltered = filterMovies(
       savedMovies,
       searchQuerySavedMov,
@@ -341,7 +356,10 @@ function App() {
     }
     setShowPreloader(false);
     setRenderSaveMov(moviesFiltered);
+    }
   }, [searchQuerySavedMov, shortMoviesSavedMov, savedMovies, showPreloader]);
+
+
 
   // загружаем данные с локального хранилища при перезагрузке страницы
   useEffect(() => {
@@ -351,6 +369,7 @@ function App() {
     }
   }, []);
 
+
   // сохраним результат в локальное хранилище
   const saveResultToLocalStorage = (isShortMovies, searchQuery, movies) => {
     localStorage.setItem('searchQuery', searchQuery);
@@ -358,30 +377,35 @@ function App() {
     localStorage.setItem('foundMovies', JSON.stringify(movies));
   };
 
+
   // фильтрация начальных карточек
   useMemo(() => {
-    if (!searchQuery || initialMovies.length === 0) return;
-  
+    if (searchQuery && initialMovies.length > 0) {
+    setShowPreloader(true);
+    setWindowSize(window.innerWidth);
+
     const moviesFiltered = filterMovies(
       initialMovies,
       searchQuery,
       shortMoviesChecked
     );
-    setMoviesFiltered(moviesFiltered);
+
     setShowPreloader(false);
+    setMoviesFiltered(moviesFiltered);
     saveResultToLocalStorage(shortMoviesChecked, searchQuery, moviesFiltered);
     setMessage(moviesFiltered);
+    }
   }, [searchQuery, initialMovies, shortMoviesChecked]);
+
 
   // узнаем ширину окна
   useEffect(() => {
-
     setWindowSize(window.innerWidth);
 
     // при резайзе окна обновляем переменную ширины экрана
     const handleChangeWidth = (evt) => {
       const handleTimer = () => {
-        setWindowSize(evt.target.outerWidth);
+        setWindowSize(evt.target.innerWidth);
       };
       setTimeout(handleTimer, '500');
     };
@@ -395,17 +419,18 @@ function App() {
 
   // определим сколько карточек загружать
   useEffect(() => {
-    // сбросим количество добавления карточек
-    setNumberCardToAdd(0);
     if (windowSize >= DISPLAY_WIDTH.WIDTH_1200) {
       setNumberCardToRender(CARDS_TO_RENDER.WIDTH_1200);
+      setNumberCardToAdd(0);
     } else if (
       windowSize >= DISPLAY_WIDTH.WIDTH_768 &&
       windowSize <= DISPLAY_WIDTH.WIDTH_1199
     ) {
       setNumberCardToRender(CARDS_TO_RENDER.WIDTH_768PX);
+      setNumberCardToAdd(0);
     } else {
       setNumberCardToRender(CARDS_TO_RENDER.WIDTH_480PX);
+      setNumberCardToAdd(0);
     }
   }, [windowSize]);
 
@@ -437,17 +462,21 @@ function App() {
 
   // добавляем карточки по клику на кнопку*
   const loadMoreCards = () => {
+    setWindowSize(window.innerWidth);
     if (windowSize >= DISPLAY_WIDTH.WIDTH_1200) {
       setNumberCardToAdd(numberCardToAdd + CARDS_NUM_TO_ADD.WIDTH_1200);
+      console.log(windowSize);
     }
     if (
       windowSize >= DISPLAY_WIDTH.WIDTH_768 &&
       windowSize <= DISPLAY_WIDTH.WIDTH_1199
     ) {
       setNumberCardToAdd(numberCardToAdd + CARDS_NUM_TO_ADD.WIDTH_768PX);
+      console.log(windowSize);
     }
     if (windowSize < DISPLAY_WIDTH.WIDTH_767) {
       setNumberCardToAdd(numberCardToAdd + CARDS_NUM_TO_ADD.WIDTH_480PX);
+      console.log(windowSize);
     }
   };
 

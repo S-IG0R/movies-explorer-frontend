@@ -36,6 +36,7 @@ export function SearchForm({
     if (!values.search.value) {
       // установим стейт невалидного поля
       setIsInputValid(true);
+      handleSubmitSearchForm('');
     } else {
       setIsInputValid(false);
       handleSubmitSearchForm(values.search.value);
