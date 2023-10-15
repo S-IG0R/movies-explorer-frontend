@@ -286,6 +286,7 @@ function App() {
   // самбит поиска по всем фильмам
   const handleSubmitSearchForm = (searchQuery) => {
     setSearchQuery(searchQuery);
+    if(!searchQuery) return
     const moviesFromLocalStorage = localStorage.getItem('movies');
     if (!moviesFromLocalStorage) {
       setDisableInput(true);
@@ -309,7 +310,6 @@ function App() {
       setInitialMovies(JSON.parse(moviesFromLocalStorage));
     }
   };
-
 
   // сабмит поиска по сохр. фильмам
   const handleSubmitSearchSavedMovies = (searchQuery) => {
@@ -337,11 +337,16 @@ function App() {
   };
 
 
+  // обновляет рендеринг при удалении карточки из сохр. фильмов
+  useEffect(() => {
+    setRenderSaveMov(savedMovies);
+  }, [savedMovies])
+
+
   // фильтрация сохраненных фильмов
   useMemo(() => {
-    if(searchQuerySavedMov) {
+    if (searchQuerySavedMov) {
     setDisableInput(true);
-    setShowPreloader(true);
     const moviesFiltered = filterMovies(
       savedMovies,
       searchQuerySavedMov,
@@ -383,7 +388,6 @@ function App() {
 
   // фильтрация начальных карточек
   useMemo(() => {
-    setShowPreloader(false);
     if (searchQuery && initialMovies.length > 0) {
     setDisableInput(true);
     setWindowSize(window.innerWidth);
@@ -393,8 +397,7 @@ function App() {
       searchQuery,
       shortMoviesChecked
     );
-    setDisableInput(false);
-    setShowPreloader(false);
+
     setMoviesFiltered(moviesFiltered);
     saveResultToLocalStorage(shortMoviesChecked, searchQuery, moviesFiltered);
     setMessage(moviesFiltered);
@@ -459,6 +462,8 @@ function App() {
       ? setShowButtonMore(true)
       : setShowButtonMore(false);
 
+    setDisableInput(false);
+    setShowPreloader(false);
     setMoviesToRender(moviesToRender);
 
     // отправляем новый массив на рендеринг
@@ -469,18 +474,15 @@ function App() {
     setWindowSize(window.innerWidth);
     if (windowSize >= DISPLAY_WIDTH.WIDTH_1200) {
       setNumberCardToAdd(numberCardToAdd + CARDS_NUM_TO_ADD.WIDTH_1200);
-      console.log(windowSize);
     }
     if (
       windowSize >= DISPLAY_WIDTH.WIDTH_768 &&
       windowSize <= DISPLAY_WIDTH.WIDTH_1199
     ) {
       setNumberCardToAdd(numberCardToAdd + CARDS_NUM_TO_ADD.WIDTH_768PX);
-      console.log(windowSize);
     }
     if (windowSize < DISPLAY_WIDTH.WIDTH_767) {
       setNumberCardToAdd(numberCardToAdd + CARDS_NUM_TO_ADD.WIDTH_480PX);
-      console.log(windowSize);
     }
   };
 
