@@ -1,8 +1,9 @@
 import './SubmitButton.css';
-export function SubmitButton({ title, disabled }) {
+export function SubmitButton({ title, disabled = false, classes = {} }) {
+
   return (
     <button
-      className={`button-submit ${!disabled && 'button-submit_disabled'}`}
+      className={`button-submit ${classes.root} ${!disabled && 'button-submit_disabled'}`}
       type="submit"
       disabled={!disabled}
     >

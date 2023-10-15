@@ -1,4 +1,5 @@
 import './Profile.css';
+import { SubmitButton } from '../SubmitButton/SubmitButton';
 import React, { useEffect, useState } from 'react';
 import { useForm } from '../../hooks/useForm';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
@@ -7,7 +8,7 @@ import {
   NAME_REGEX,
   NAME_HINT,
   EMAIL_HINT,
-  RESPONSE_CODES
+  RESPONSE_CODES,
 } from '../../utils/constants';
 
 export function Profile({
@@ -15,9 +16,11 @@ export function Profile({
   handleLogout,
   profileMessage,
   setProfileMessage,
-  disableInput
+  disableInput,
 }) {
   const [errorMessage, setErrorMessage] = useState('');
+  const [isEdit, setIsEdit] = useState(false);
+  const [error, setError] = useState(false);
 
   const currentUser = React.useContext(CurrentUserContext);
 
@@ -45,14 +48,35 @@ export function Profile({
     });
   }, [currentUser]);
 
+  const onLogout = () => {
+    handleLogout();
+  };
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
     handleUpdateProfile(values.name.value, values.email.value);
   };
 
-  const onLogout = () => {
-    handleLogout();
-  };
+  useEffect(() => {
+    if (!profileMessage) {
+      setIsEdit(false);
+      setError(false);
+    }
+    else {
+      setError(true);
+    }
+  }, [currentUser, profileMessage]);
+
+  useEffect(() => {
+    setError(false);
+    setProfileMessage(' ');
+  }, [values]);
+
+  useEffect(() => {
+    setIsEdit(false);
+    setError(false);
+    setProfileMessage('');
+  }, []);
 
   useEffect(() => {
     if (profileMessage === RESPONSE_CODES.CONFLICT) {
@@ -71,10 +95,6 @@ export function Profile({
       setErrorMessage('');
     }
   }, [profileMessage]);
-
-  useEffect(() => {
-    setProfileMessage('');
-  }, [values]);
 
   return (
     <section className="profile">
@@ -98,7 +118,7 @@ export function Profile({
             title={NAME_HINT}
             pattern={NAME_REGEX}
             placeholder="Иван Петров"
-            disabled={disableInput}
+            disabled={!isEdit && !disableInput}
             required
           />
           <span className="profile__input-error">
@@ -118,7 +138,7 @@ export function Profile({
             title={EMAIL_HINT}
             placeholder="example@example.com"
             pattern={EMAIL_REGEX}
-            disabled={disableInput}
+            disabled={!isEdit && !disableInput}
             required
           />
           <span className="profile__input-error">
@@ -129,28 +149,43 @@ export function Profile({
           {profileMessage && (
             <span className="profile__error">{errorMessage}</span>
           )}
-          <button
-            className={`profile__button-edit ${
-              values.email.isValid && values.name.isValid
-                ? ''
-                : 'profile__button-edit_disabled'
-            }`}
-            type="submit"
-            disabled={
-              values.email.isValid || values.name.isValid ? false : true
-            }
-          >
-            Редактировать
-          </button>
+          {!isEdit && (
+            <button
+              className={`profile__button-edit ${
+                values.email.isValid && values.name.isValid
+                  ? ''
+                  : 'profile__button-edit_disabled'
+              }`}
+              type="button"
+              onClick={() => {
+                setIsEdit(true);
+              }}
+            >
+              Редактировать
+            </button>
+          )}
+          {isEdit && (
+            <SubmitButton
+              title="Сохранить"
+              classes={{ root: 'button-submit_type_profile ' }}
+              disabled={
+                !error &&
+                ((values.email.value !== currentUser?.email && values.email.isValid) ||
+                 (values.name.value !== currentUser?.name && values.name.isValid))
+              }
+            />
+          )}
         </div>
       </form>
-      <button
-        className="profile__button-logout"
-        type="button"
-        onClick={onLogout}
-      >
-        Выйти из аккаунта
-      </button>
+      {!isEdit && (
+        <button
+          className="profile__button-logout"
+          type="button"
+          onClick={onLogout}
+        >
+          Выйти из аккаунта
+        </button>
+      )}
     </section>
   );
 }

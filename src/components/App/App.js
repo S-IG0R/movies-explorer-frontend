@@ -170,7 +170,8 @@ function App() {
     setShortMoviesSavedMov(false);
     setMoviesFiltered([]);
     setInitialMovies([]);
-    setNumberCardToAdd(null);
+    setNumberCardToAdd(0);
+    setNumberCardToRender(0);
     setMoviesToRender([]);
     setShowPreloader(false);
     setShowButtonMore(null);
@@ -359,7 +360,8 @@ function App() {
 
   // фильтрация начальных карточек
   useMemo(() => {
-    if (!searchQuery) return;
+    if (!searchQuery || initialMovies.length === 0) return;
+  
     const moviesFiltered = filterMovies(
       initialMovies,
       searchQuery,
@@ -373,7 +375,6 @@ function App() {
 
   // узнаем ширину окна
   useEffect(() => {
-    // if (moviesFiltered.length === 0) return;
 
     setWindowSize(window.innerWidth);
 
