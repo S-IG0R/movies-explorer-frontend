@@ -2,17 +2,18 @@ import './Login.css';
 import { Input } from '../Input/Input';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { PageWithForm } from '../PageWithForm/PageWithForm';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 
-export function Login({ setLoggedIn }) {
-  const navigate = useNavigate();
+import { ROUTES, EMAIL_REGEX, RESPONSE_CODES } from '../../utils/constants';
+import { useEffect, useState } from 'react';
 
-  const onSubmit = (evt) => {
-    evt.preventDefault();
-    setLoggedIn(true);
-    navigate('/movies', { replace: true });
-  };
+export function Login({
+  handleLogin,
+  loginMessage,
+  setLoginMessage,
+  disableInput,
+}) {
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { values, handleChange } = useForm({
     email: {
@@ -27,12 +28,37 @@ export function Login({ setLoggedIn }) {
     },
   });
 
+  useEffect(() => {
+    setLoginMessage('');
+  }, [values]);
+
+  const onSubmit = (evt) => {
+    evt.preventDefault();
+    handleLogin(values.email.value, values.password.value);
+  };
+
+  useEffect(() => {
+    if (loginMessage === RESPONSE_CODES.UNAUTHORIZED) {
+      setErrorMessage('Вы ввели неправильный логин или пароль.');
+    }
+    if (loginMessage === RESPONSE_CODES.BAD_REQUEST) {
+      setErrorMessage('Переданы некорректные данные');
+    }
+    if (loginMessage === RESPONSE_CODES.SERVER_ERROR) {
+      setErrorMessage('500 На сервере произошла ошибка');
+    }
+    if (loginMessage === RESPONSE_CODES.NOT_FOUND) {
+      setErrorMessage('404 Страница по указанному маршруту не найдена');
+    }
+    if (!loginMessage) setErrorMessage('');
+  }, [loginMessage]);
+
   return (
     <PageWithForm
       title="Рады видеть!"
       formName="login-form"
       underButtonText="Ещё не зарегистрированы?"
-      link="/signup"
+      link={ROUTES.REGISTER}
       linkName="Регистрация"
       onSubmit={onSubmit}
     >
@@ -48,6 +74,8 @@ export function Login({ setLoggedIn }) {
           minLength="2"
           maxLength="30"
           placeholder="example@example.com"
+          pattern={EMAIL_REGEX}
+          disabled={disableInput}
         />
         <Input
           name="password"
@@ -59,11 +87,10 @@ export function Login({ setLoggedIn }) {
           validationMessage={values.password.validationMessage}
           minLength="8"
           maxLength="30"
-          placeholder="Ваш пароль"
+          placeholder="Мин. длина 8 символов"
+          disabled={disableInput}
         />
-        <span className="login__error">
-          Вы ввели неправильный логин или пароль.
-        </span>
+        {loginMessage && <span className="login__error">{errorMessage}</span>}
       </div>
       <SubmitButton
         title="Войти"

@@ -1,12 +1,13 @@
 import './HeaderNavigation.css';
 import { NavLink } from 'react-router-dom';
+import { ROUTES } from '../../utils/constants';
 
 export function HeaderNavigation() {
   return (
     <ul className="navigation-bar">
       <li className="navigation-bar__list-item">
         <NavLink
-          to="/movies"
+          to={ROUTES.MOVIES}
           className={({ isActive }) =>
             `${
               isActive
@@ -20,7 +21,7 @@ export function HeaderNavigation() {
       </li>
       <li className="navigation-bar__list-item">
         <NavLink
-          to="/saved-movies"
+          to={ROUTES.SAVED_MOVIES}
           className={({ isActive }) =>
             `${
               isActive

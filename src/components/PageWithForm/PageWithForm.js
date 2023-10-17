@@ -1,7 +1,6 @@
 import './PageWithForm.css';
 import { Logo } from '../Logo/Logo';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 export function PageWithForm({
   children,

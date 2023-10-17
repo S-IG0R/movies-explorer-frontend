@@ -1,8 +1,30 @@
 import './Profile.css';
+import { SubmitButton } from '../SubmitButton/SubmitButton';
+import React, { useEffect, useState } from 'react';
 import { useForm } from '../../hooks/useForm';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import {
+  EMAIL_REGEX,
+  NAME_REGEX,
+  NAME_HINT,
+  EMAIL_HINT,
+  RESPONSE_CODES,
+} from '../../utils/constants';
 
-export function Profile({ setLoggedIn }) {
-  const { values, handleChange } = useForm({
+export function Profile({
+  handleUpdateProfile,
+  handleLogout,
+  profileMessage,
+  setProfileMessage,
+  disableInput,
+}) {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isEdit, setIsEdit] = useState(false);
+  const [error, setError] = useState(false);
+
+  const currentUser = React.useContext(CurrentUserContext);
+
+  const { values, handleChange, setValues } = useForm({
     name: {
       isValid: '',
       validationMessage: '',
@@ -15,28 +37,88 @@ export function Profile({ setLoggedIn }) {
     },
   });
 
-  const handleLogout = () => {
-    setLoggedIn(false);
+  useEffect(() => {
+    setValues({
+      name: {
+        value: currentUser?.name ?? '',
+      },
+      email: {
+        value: currentUser?.email ?? '',
+      },
+    });
+  }, [currentUser]);
+
+  const onLogout = () => {
+    handleLogout();
   };
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    handleUpdateProfile(values.name.value, values.email.value);
+  };
+
+  useEffect(() => {
+    if (!profileMessage) {
+      setIsEdit(false);
+      setError(false);
+    }
+    else {
+      setError(true);
+    }
+  }, [currentUser, profileMessage]);
+
+  useEffect(() => {
+    setError(false);
+    setProfileMessage(' ');
+  }, [values]);
+
+  useEffect(() => {
+    setIsEdit(false);
+    setError(false);
+    setProfileMessage('');
+  }, []);
+
+  useEffect(() => {
+    if (profileMessage === RESPONSE_CODES.CONFLICT) {
+      setErrorMessage('Пользователь с таким email уже существует');
+    }
+    if (profileMessage === RESPONSE_CODES.BAD_REQUEST) {
+      setErrorMessage('При обновлении профиля произошла ошибка.');
+    }
+    if (profileMessage === RESPONSE_CODES.SERVER_ERROR) {
+      setErrorMessage('500 На сервере произошла ошибка.');
+    }
+    if (profileMessage === RESPONSE_CODES.NOT_FOUND) {
+      setErrorMessage('404 Страница по указанному маршруту не найдена.');
+    }
+    if (!profileMessage) {
+      setErrorMessage('');
+    }
+  }, [profileMessage]);
+
   return (
     <section className="profile">
-      <h1 className="profile__name">{`Привет, ${'Виталий'}!`}</h1>
+      <h1 className="profile__name">{`Привет, ${currentUser?.name}!`}</h1>
       <form
         className="profile__form"
         name="profile-form"
-        onSubmit={(evt) => evt.preventDefault()}
+        onSubmit={handleSubmit}
         noValidate
       >
         <label className="profile__input-label">
           Имя
           <input
-            className={`profile__input ${values.name.validationMessage && 'profile__input_error'}`}
+            className={`profile__input ${
+              values.name.validationMessage && 'profile__input_error'
+            }`}
             type="text"
             name="name"
             value={values.name.value}
             onChange={handleChange}
-            minLength="2"
-            maxLength="30"
+            title={NAME_HINT}
+            pattern={NAME_REGEX}
+            placeholder="Иван Петров"
+            disabled={!isEdit && !disableInput}
             required
           />
           <span className="profile__input-error">
@@ -46,11 +128,17 @@ export function Profile({ setLoggedIn }) {
         <label className="profile__input-label">
           E-mail
           <input
-            className={`profile__input ${values.email.validationMessage && 'profile__input_error'}`}
+            className={`profile__input ${
+              values.email.validationMessage && 'profile__input_error'
+            }`}
             type="email"
             name="email"
             value={values.email.value}
             onChange={handleChange}
+            title={EMAIL_HINT}
+            placeholder="example@example.com"
+            pattern={EMAIL_REGEX}
+            disabled={!isEdit && !disableInput}
             required
           />
           <span className="profile__input-error">
@@ -58,31 +146,46 @@ export function Profile({ setLoggedIn }) {
           </span>
         </label>
         <div className="profile__button-container">
-          <span className="profile__error">
-            При обновлении профиля произошла ошибка.
-          </span>
-          <button
-            className={`profile__button-edit ${
-              values.email.isValid && values.name.isValid
-                ? ''
-                : 'profile__button-edit_disabled'
-            }`}
-            type="submit"
-            disabled={
-              values.email.isValid && values.name.isValid ? false : true
-            }
-          >
-            Редактировать
-          </button>
+          {profileMessage && (
+            <span className="profile__error">{errorMessage}</span>
+          )}
+          {!isEdit && (
+            <button
+              className={`profile__button-edit ${
+                values.email.isValid && values.name.isValid
+                  ? ''
+                  : 'profile__button-edit_disabled'
+              }`}
+              type="button"
+              onClick={() => {
+                setIsEdit(true);
+              }}
+            >
+              Редактировать
+            </button>
+          )}
+          {isEdit && (
+            <SubmitButton
+              title="Сохранить"
+              classes={{ root: 'button-submit_type_profile ' }}
+              disabled={
+                !error &&
+                ((values.email.value !== currentUser?.email && values.email.isValid) ||
+                 (values.name.value !== currentUser?.name && values.name.isValid))
+              }
+            />
+          )}
         </div>
       </form>
-      <button
-        className="profile__button-logout"
-        type="button"
-        onClick={handleLogout}
-      >
-        Выйти из аккаунта
-      </button>
+      {!isEdit && (
+        <button
+          className="profile__button-logout"
+          type="button"
+          onClick={onLogout}
+        >
+          Выйти из аккаунта
+        </button>
+      )}
     </section>
   );
 }

@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { NavTabButton } from '../NavTabButton/NavTabButton';
 import './NavTab.css';
 
